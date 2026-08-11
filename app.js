@@ -1,31 +1,30 @@
 /**
- * QUICKNIKH RESUME — Core Logic & Multi-Platform Engine (Android PWA + Desktop Mode)
+ * QUICKNIKH RESUME — Fast, Simple & Streamlined Multi-Platform Engine
+ * Optimized for Android Chrome & Desktop
  */
 
-// Basic & Essential Office / Productivity Skills (Always Available)
+// Basic & Essential Office / Computer Skills
 const BASIC_OFFICE_SKILLS = [
   { name: "MS Excel", icon: "📊" },
   { name: "Tally ERP / Prime", icon: "📑" },
   { name: "MS Word", icon: "📝" },
   { name: "MS PowerPoint", icon: "📽️" },
-  { name: "Data Entry & Management", icon: "🗃️" },
+  { name: "Data Entry & Office", icon: "🗃️" },
   { name: "Accounting & GST", icon: "🧮" },
-  { name: "Email & Client Communication", icon: "📧" },
-  { name: "Fast Typing (50+ WPM)", icon: "⌨️" },
-  { name: "Google Sheets & Docs", icon: "📈" }
+  { name: "Client Communication", icon: "📧" },
+  { name: "Fast Typing (50+ WPM)", icon: "⌨️" }
 ];
 
-// Bio Presets by Category
+// Bio Presets
 const BIO_PRESETS = {
-  fresher: "Motivated and detail-oriented graduate with strong foundational skills in problem-solving, modern technologies, and a drive to contribute to innovative projects in a dynamic engineering team.",
-  tech: "High-impact Software Engineer with deep expertise in architecting scalable full-stack applications, cloud microservices, and leading distributed agile engineering teams.",
-  executive: "Strategic leader with a proven track record of scaling high-performing teams, optimizing operational execution, and delivering mission-critical business outcomes.",
-  creative: "User-centric designer passionate about crafting intuitive digital experiences, modern design systems, and bridging user needs with product goals.",
-  results: "Proactive, results-driven professional known for executing cross-functional initiatives, optimizing workflows, and delivering measurable impact in fast-paced environments.",
-  transition: "Dynamic professional leveraging a diverse background and strong analytical problem-solving skills to drive growth, rapid adaptability, and cross-functional success."
+  fresher: "Motivated and detail-oriented graduate with strong foundational problem-solving skills, academic excellence, and a passion to contribute to innovative projects.",
+  tech: "Results-driven Software Engineer with deep expertise in architecting robust applications, modern frameworks, and scalable cloud solutions.",
+  executive: "Strategic leader with a proven record of driving operational excellence, cross-functional collaboration, and delivering high-impact business outcomes.",
+  creative: "User-centric designer passionate about crafting intuitive digital experiences, modern aesthetic interfaces, and effective visual branding.",
+  results: "Proactive, analytical professional skilled in workflow optimization, task execution, and delivering measurable results in fast-paced teams."
 };
 
-// Skill Percentage Level Helper for Glorified Gauge Lines
+// Skill Percentage Helper for Progress Gauge Tracks
 function getSkillPercentage(level) {
   switch ((level || "").toLowerCase()) {
     case "expert": return "95%";
@@ -36,16 +35,18 @@ function getSkillPercentage(level) {
   }
 }
 
-// Initial State
+// Initial Default State
 const defaultState = {
-  activeView: "types",   // "types", "wizard", "content", "style"
+  activeView: "wizard",  // "wizard", "content", "style"
   viewMode: "auto",      // "auto", "desktop", "android"
+  mobilePreviewActive: false,
+  zoomFit: true,
   wizardStep: 1,         // 1..5
   resumeType: "tech",    // "tech", "fresher", "executive", "ats", "creative", "academic"
   density: "auto",       // "auto", "spacious", "balanced", "compact"
   personal: {
     name: "Ramu",
-    headline: "Senior Full-Stack Engineer & Architect",
+    headline: "Senior Full-Stack Engineer",
     dob: "15 April 1997",
     location: "Kanpur",
     email: "ramu@email.com",
@@ -61,21 +62,21 @@ const defaultState = {
       score: "GPA: 3.85 / 4.0 (First Class with Distinction)"
     }
   ],
-  skills: [], // EMPTY by default — user clicks basic office or technical chips to select!
+  skills: [], // User selects basic office or suggested chips
   experience: [
     {
       id: "e-1",
-      title: "Lead Full-Stack Software Engineer",
-      company: "Nexus Technologies Inc.",
+      title: "Lead Software Engineer",
+      company: "Nexus Technologies",
       period: "2021 – Present",
-      description: "• Architected distributed cloud microservices serving 1.5M+ active daily users with 99.98% uptime.\n• Spearheaded the migration from legacy monolithic architecture to React, Next.js, and Node.js micro-frontends.\n• Mentored 8 junior and mid-level engineers, establishing coding standards and automated CI/CD deployment pipelines."
+      description: "• Architected distributed web applications serving 1.5M+ active users with 99.9% uptime.\n• Spearheaded the migration to modern micro-frontend architecture.\n• Mentored junior engineers and established high-efficiency CI/CD deployment pipelines."
     },
     {
       id: "e-2",
-      title: "Software Engineer",
+      title: "Software Developer",
       company: "Apex Cloud Solutions",
       period: "2019 – 2021",
-      description: "• Designed real-time telemetry dashboards and API endpoints in Python & PostgreSQL, improving query latency by 45%.\n• Collaborated with product designers to implement responsive, accessible UI components used across 6 core products.\n• Automated unit and integration testing coverage, increasing test suites from 60% to 92%."
+      description: "• Built real-time telemetry dashboards and API endpoints, improving query speed by 40%.\n• Designed responsive, accessible UI components used across core web products."
     }
   ],
   customization: {
@@ -85,82 +86,69 @@ const defaultState = {
   }
 };
 
-// Realistic Sample Skills (populated ONLY when user clicks "Sample Data")
+// Demo Skills for "Sample Data"
 const SAMPLE_DEMO_SKILLS = [
   { id: "s-1", name: "MS Excel", level: "Expert" },
   { id: "s-2", name: "JavaScript / TypeScript", level: "Expert" },
-  { id: "s-3", name: "React & Next.js", level: "Expert" },
-  { id: "s-4", name: "Node.js & Python", level: "Advanced" },
-  { id: "s-5", name: "SQL & Databases", level: "Advanced" },
-  { id: "s-6", name: "Docker & Kubernetes", level: "Proficient" }
+  { id: "s-3", name: "React & Node.js", level: "Expert" },
+  { id: "s-4", name: "Python & SQL", level: "Advanced" },
+  { id: "s-5", name: "Git & DevOps", level: "Proficient" }
 ];
 
-// Type Configurations & Metadata
+// Type Configurations
 const TYPE_CONFIGS = {
   tech: {
-    name: "Tech & Software Engineer",
-    badgeText: "💻 Tech & Software",
+    name: "Tech & Software",
     template: "modern",
     color: "#2563eb",
     font: "'Plus Jakarta Sans', sans-serif",
-    defaultHeadline: "Senior Full-Stack Engineer",
     defaultBioKey: "tech",
     suggestedSkills: ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL & Databases", "Docker & K8s", "Git & CI/CD", "System Design", "Cloud & DevOps"]
   },
   fresher: {
-    name: "Fresher / Entry-Level",
-    badgeText: "🎓 Fresher / Graduate",
+    name: "Fresher / Graduate",
     template: "fresher",
     color: "#059669",
     font: "'Outfit', sans-serif",
-    defaultHeadline: "Computer Science Graduate / Fresher",
     defaultBioKey: "fresher",
-    suggestedSkills: ["MS Excel", "MS Word", "Python", "Java", "Data Structures", "Web Development", "Database Management", "Problem Solving", "Team Collaboration", "Communication"]
+    suggestedSkills: ["MS Excel", "MS Word", "Python", "Java", "Web Development", "Data Structures", "Problem Solving", "Team Collaboration", "Communication"]
   },
   executive: {
-    name: "Executive & Management",
-    badgeText: "👔 Executive & Leadership",
+    name: "Executive & Leadership",
     template: "executive",
     color: "#0f172a",
     font: "'Plus Jakarta Sans', sans-serif",
-    defaultHeadline: "Engineering Manager & Tech Lead",
     defaultBioKey: "executive",
-    suggestedSkills: ["Strategic Planning", "P&L Management", "Team Leadership", "Budgeting", "Cross-Functional Alignment", "MS PowerPoint", "Stakeholder Engagement", "Product Strategy"]
+    suggestedSkills: ["Strategic Planning", "Team Leadership", "Budgeting", "Cross-Functional Alignment", "MS PowerPoint", "Stakeholder Engagement", "Product Strategy"]
   },
   ats: {
     name: "ATS Clean Scan",
-    badgeText: "📄 ATS Clean Scan",
     template: "ats",
     color: "#0f172a",
     font: "'Inter', sans-serif",
-    defaultHeadline: "Results-Driven Professional",
     defaultBioKey: "results",
     suggestedSkills: ["MS Excel", "Project Management", "Data Analysis", "Technical Analysis", "Communication", "Problem Solving", "Quality Assurance"]
   },
   creative: {
     name: "Creative & Designer",
-    badgeText: "🎨 Creative & Design",
     template: "creative",
     color: "#7c3aed",
     font: "'Outfit', sans-serif",
-    defaultHeadline: "Lead UI/UX & Product Designer",
     defaultBioKey: "creative",
-    suggestedSkills: ["UI/UX Design", "Figma", "Design Systems", "Prototyping", "User Research", "Visual Branding", "HTML/CSS", "Wireframing", "Creative Direction"]
+    suggestedSkills: ["UI/UX Design", "Figma", "Design Systems", "Prototyping", "User Research", "Visual Branding", "HTML/CSS", "Wireframing"]
   },
   academic: {
-    name: "Academic & Scientific",
-    badgeText: "🔬 Academic & Research",
+    name: "Academic & Research",
     template: "executive",
     color: "#e11d48",
     font: "'Playfair Display', serif",
-    defaultHeadline: "Research Scholar & Scientist",
     defaultBioKey: "results",
-    suggestedSkills: ["Research Methodology", "Statistical Analysis", "Data Modeling", "Scientific Writing", "MS Word", "MS Excel", "Grant Proposals", "Peer Review", "Public Speaking"]
+    suggestedSkills: ["Research Methodology", "Statistical Analysis", "Data Modeling", "Scientific Writing", "MS Word", "MS Excel", "Public Speaking"]
   }
 };
 
 const WIZARD_STEP_TITLES = [
-  "1. Personal Name & Title",
+  "1. Name & Professional Title",
   "2. Date of Birth (DOB) & Contact",
   "3. Qualifications & Education",
   "4. Skills & Competencies",
@@ -168,9 +156,7 @@ const WIZARD_STEP_TITLES = [
 ];
 
 let appState = JSON.parse(JSON.stringify(defaultState));
-const STORAGE_KEY = "quicknikh_resume_state_v4";
-
-// PWA deferred install prompt
+const STORAGE_KEY = "quicknikh_resume_state_v5";
 let deferredInstallPrompt = null;
 
 // ==========================================================================
@@ -191,8 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
   bindThemeCustomizers();
   bindHeaderActions();
   bindMobileNavigation();
+  bindZoomFit();
 
-  // Initial renders
+  // Initial Renders
   renderBasicSkillSuggestionChips();
   renderQualificationsList();
   renderSkillsChips();
@@ -202,7 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setDensity(appState.density || "auto", false);
   setWizardStep(appState.wizardStep || 1);
   setViewMode(appState.viewMode || "auto", false);
-  switchView(appState.activeView || "types");
+  switchView(appState.activeView || "wizard");
+  applyZoomFit(appState.zoomFit !== false);
 });
 
 // ==========================================================================
@@ -212,8 +200,8 @@ function initServiceWorker() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./sw.js")
-        .then((reg) => console.log("QUICKNIKH Service Worker registered successfully!", reg.scope))
-        .catch((err) => console.warn("Service Worker registration failed:", err));
+        .then((reg) => console.log("QUICKNIKH PWA Worker registered:", reg.scope))
+        .catch((err) => console.warn("PWA registration failed:", err));
     });
   }
 }
@@ -254,7 +242,7 @@ function initPwaInstallPrompt() {
 }
 
 // ==========================================================================
-// View Mode Switcher (Auto / Desktop Mode / Android Mode)
+// View Mode Switcher (Auto / Desktop / Mobile)
 // ==========================================================================
 function bindViewModeSwitcher() {
   const modePills = document.querySelectorAll(".mode-pill");
@@ -278,23 +266,17 @@ function setViewMode(mode, triggerToast = true) {
   });
 
   if (triggerToast) {
-    let modeText = "🔄 Responsive Auto Mode";
-    if (mode === "desktop") modeText = "💻 Desktop Split Mode (Wide Layout)";
-    if (mode === "android") modeText = "📱 Android Touch App Mode";
+    let modeText = "🔄 Auto Responsive Mode";
+    if (mode === "desktop") modeText = "💻 Desktop Split Mode";
+    if (mode === "android") modeText = "📱 Mobile App Mode";
     showToast(modeText, "info");
   }
 
-  // Adjust preview on mode change
-  if (mode === "desktop") {
-    const editorPane = document.getElementById("editor-pane");
-    const previewPane = document.getElementById("preview-pane");
-    if (editorPane) editorPane.classList.remove("view-preview");
-    if (previewPane) previewPane.classList.remove("view-editor");
-  }
+  applyZoomFit(appState.zoomFit !== false);
 }
 
 // ==========================================================================
-// Storage Helpers
+// Storage Helpers (With Auto Migration)
 // ==========================================================================
 function saveToStorage() {
   try {
@@ -330,7 +312,7 @@ function loadFromStorage() {
 }
 
 // ==========================================================================
-// A4 Page Auto-Fill Calculation (Proportional Sizing + Glorified Lines)
+// A4 Auto-Fill Calculation
 // ==========================================================================
 function calculateA4FillScale() {
   const { density, personal, qualifications, skills, experience } = appState;
@@ -341,27 +323,22 @@ function calculateA4FillScale() {
     return "scale-balanced";
   }
 
-  // Auto-Fill Calculation
-  let contentScore = 0;
-  if (personal.summary) contentScore += Math.min(3, Math.ceil(personal.summary.length / 90));
-  contentScore += qualifications.length * 1.5;
-  contentScore += Math.ceil(skills.length / 3);
+  let score = 0;
+  if (personal.summary) score += Math.min(3, Math.ceil(personal.summary.length / 90));
+  score += qualifications.length * 1.5;
+  score += Math.ceil(skills.length / 3);
   experience.forEach((exp) => {
-    contentScore += 2;
-    if (exp.description) contentScore += Math.min(2.5, Math.ceil(exp.description.length / 100));
+    score += 2;
+    if (exp.description) score += Math.min(2.5, Math.ceil(exp.description.length / 100));
   });
 
-  if (contentScore <= 6.5) {
-    return "scale-roomy";
-  } else if (contentScore <= 12) {
-    return "scale-balanced";
-  } else {
-    return "scale-compact";
-  }
+  if (score <= 6.5) return "scale-roomy";
+  if (score <= 12) return "scale-balanced";
+  return "scale-compact";
 }
 
 // ==========================================================================
-// Density & A4 Page Fill Controls
+// Density & Page Fill Controls
 // ==========================================================================
 function bindDensityControls() {
   const densityBtns = document.querySelectorAll(".density-pill");
@@ -381,7 +358,7 @@ function setDensity(densityVal, triggerToast = true) {
   onStateChange();
   if (triggerToast) {
     const label = densityVal === "auto" ? "✨ Auto-Fill A4 (Smart Scaling)" : densityVal.toUpperCase();
-    showToast(`A4 Page Fill: ${label}`, "info");
+    showToast(`Page Density: ${label}`, "info");
   }
 }
 
@@ -395,14 +372,12 @@ function bindHeadlineOptions() {
       const titleText = btn.getAttribute("data-title");
       if (titleText) {
         appState.personal.headline = titleText;
-
         const wHeadline = document.getElementById("w-input-headline");
         const fullHeadline = document.getElementById("input-headline");
         if (wHeadline) wHeadline.value = titleText;
         if (fullHeadline) fullHeadline.value = titleText;
-
         onStateChange();
-        showToast(`Applied Title: "${titleText}"`, "success");
+        showToast(`Selected: "${titleText}"`, "success");
       }
     });
   });
@@ -419,21 +394,19 @@ function bindBioOptions() {
       const bioText = BIO_PRESETS[key];
       if (bioText) {
         appState.personal.summary = bioText;
-
         const wSummary = document.getElementById("w-input-summary");
         const fullSummary = document.getElementById("input-summary");
         if (wSummary) wSummary.value = bioText;
         if (fullSummary) fullSummary.value = bioText;
-
         onStateChange();
-        showToast(`Applied ${btn.textContent.trim()} bio!`, "success");
+        showToast("Applied bio summary!", "success");
       }
     });
   });
 }
 
 // ==========================================================================
-// Basic Office Skills Suggestions (Excel, Tally, Word, PowerPoint)
+// Basic Office Skills Suggestions
 // ==========================================================================
 function renderBasicSkillSuggestionChips() {
   const containers = [
@@ -473,7 +446,7 @@ function toggleSkillSelection(skillName, defaultLevel = "Proficient") {
       name: skillName,
       level: defaultLevel
     });
-    showToast(`Added skill: "${skillName}"`, "success");
+    showToast(`Added: "${skillName}"`, "success");
   }
 
   renderSkillsChips();
@@ -481,7 +454,7 @@ function toggleSkillSelection(skillName, defaultLevel = "Proficient") {
 }
 
 // ==========================================================================
-// Navigation Tabs (Types / Wizard / Content / Style)
+// Navigation & Views
 // ==========================================================================
 function bindNavTabs() {
   const navBtns = document.querySelectorAll(".nav-tab-btn");
@@ -491,26 +464,11 @@ function bindNavTabs() {
       switchView(view);
     });
   });
-
-  const startWizardBtn = document.getElementById("btn-start-wizard");
-  if (startWizardBtn) {
-    startWizardBtn.addEventListener("click", () => {
-      setWizardStep(1);
-      switchView("wizard");
-      showToast("Starting Question 1: Name & Title", "info");
-    });
-  }
-
-  const switchToWizardBtn = document.getElementById("btn-switch-to-wizard");
-  if (switchToWizardBtn) {
-    switchToWizardBtn.addEventListener("click", () => {
-      switchView("wizard");
-    });
-  }
 }
 
 function switchView(viewName) {
   appState.activeView = viewName;
+  setMobilePreviewActive(false);
   saveToStorage();
 
   document.querySelectorAll(".nav-tab-btn").forEach((btn) => {
@@ -518,7 +476,8 @@ function switchView(viewName) {
   });
 
   document.querySelectorAll(".mobile-nav-item").forEach((item) => {
-    item.classList.toggle("active", item.getAttribute("data-target-view") === viewName);
+    const target = item.getAttribute("data-target-view");
+    item.classList.toggle("active", target === viewName);
   });
 
   document.querySelectorAll(".view-panel").forEach((panel) => {
@@ -526,8 +485,24 @@ function switchView(viewName) {
   });
 }
 
+function setMobilePreviewActive(active) {
+  appState.mobilePreviewActive = active;
+  document.body.classList.toggle("mobile-preview-active", active);
+
+  const previewNavBtn = document.getElementById("btn-mobile-nav-preview");
+  if (previewNavBtn) {
+    previewNavBtn.classList.toggle("active", active);
+  }
+
+  if (active) {
+    // Scroll preview to top
+    const wrapper = document.getElementById("resume-sheet-wrapper");
+    if (wrapper) wrapper.scrollTop = 0;
+  }
+}
+
 // ==========================================================================
-// Resume Type Selection (Starts Question Wizard Immediately)
+// Resume Type Selection
 // ==========================================================================
 function bindResumeTypeCards() {
   const cards = document.querySelectorAll(".type-card");
@@ -535,10 +510,7 @@ function bindResumeTypeCards() {
     card.addEventListener("click", () => {
       const typeKey = card.getAttribute("data-type");
       applyActiveType(typeKey, true);
-      
-      setWizardStep(1);
-      switchView("wizard");
-      showToast(`Selected "${TYPE_CONFIGS[typeKey].name}". Let's start with Question 1!`, "success");
+      showToast(`Selected "${TYPE_CONFIGS[typeKey].name}" archetype!`, "success");
     });
   });
 }
@@ -597,7 +569,7 @@ function syncSuggestionChipHighlightStates() {
 }
 
 // ==========================================================================
-// Question-by-Question Wizard Controls
+// Wizard Controls (Step 1 to 5)
 // ==========================================================================
 function bindWizardControls() {
   const prevBtn = document.getElementById("btn-w-prev");
@@ -620,22 +592,26 @@ function bindWizardControls() {
   nextBtn.addEventListener("click", () => {
     if (appState.wizardStep < 5) {
       setWizardStep(appState.wizardStep + 1);
-      showToast(`Moving to Question ${appState.wizardStep}`, "info");
     } else {
-      showToast("All questions answered! Resume ready 🎉", "success");
-      switchView("content");
+      showToast("All questions complete! Here is your resume 🎉", "success");
+      // On mobile, show preview automatically
+      if (window.innerWidth <= 1024) {
+        setMobilePreviewActive(true);
+      } else {
+        switchView("content");
+      }
     }
   });
 
   skipBtn.addEventListener("click", () => {
-    const currentStep = appState.wizardStep;
-    showToast(`Skipped Question ${currentStep}`, "info");
-
-    if (currentStep < 5) {
-      setWizardStep(currentStep + 1);
+    if (appState.wizardStep < 5) {
+      setWizardStep(appState.wizardStep + 1);
     } else {
-      showToast("Completed! Viewing your resume 🎉", "success");
-      switchView("content");
+      if (window.innerWidth <= 1024) {
+        setMobilePreviewActive(true);
+      } else {
+        switchView("content");
+      }
     }
   });
 
@@ -707,8 +683,9 @@ function setWizardStep(step) {
     dot.classList.toggle("completed", dotStep < appState.wizardStep);
   });
 
-  document.querySelectorAll(".wizard-step-card").forEach((card, idx) => {
-    card.classList.toggle("active", idx + 1 === appState.wizardStep);
+  document.querySelectorAll(".wizard-step-card").forEach((card) => {
+    const idx = parseInt(card.getAttribute("data-step-index"), 10);
+    card.classList.toggle("active", idx === appState.wizardStep);
   });
 
   const prevBtn = document.getElementById("btn-w-prev");
@@ -719,12 +696,12 @@ function setWizardStep(step) {
   }
 
   if (nextBtnText) {
-    nextBtnText.textContent = appState.wizardStep === 5 ? "Finish & View Resume 🎉" : "Next Question →";
+    nextBtnText.textContent = appState.wizardStep === 5 ? "Finish & Preview 🎉" : "Next Question →";
   }
 }
 
 // ==========================================================================
-// Form Input Bindings (Syncing Wizard & Full Editor)
+// Form Input Syncing
 // ==========================================================================
 function bindFormInputs() {
   const fields = [
@@ -814,7 +791,7 @@ function bindFormInputs() {
 }
 
 // ==========================================================================
-// Age Calculation & Flexible Typed Date Parser Helpers
+// Flexible Typed Date Parser & Age Calculation
 // ==========================================================================
 function parseDateFlexible(str) {
   if (!str || typeof str !== "string") return null;
@@ -843,7 +820,7 @@ function parseDateFlexible(str) {
     if (!isNaN(d.getTime())) return d;
   }
 
-  // Pattern 3: Natural language dates (e.g. "15 April 1997", "15th Aug 1998", "Jan 15, 1997")
+  // Pattern 3: Natural language dates (e.g. "15 April 1997", "15th Aug 1998")
   const cleanStr = trimmed.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
   const parsed = new Date(cleanStr);
   if (!isNaN(parsed.getTime()) && parsed.getFullYear() >= 1900 && parsed.getFullYear() <= new Date().getFullYear()) {
@@ -907,7 +884,7 @@ function renderQualificationsList() {
     container.innerHTML = "";
 
     if (appState.qualifications.length === 0) {
-      container.innerHTML = `<span style="font-size: 0.78rem; color: #64748b; padding: 4px;">No qualifications added. Click + Add Qualification below or Skip.</span>`;
+      container.innerHTML = `<span style="font-size: 0.78rem; color: #64748b; padding: 4px;">No qualifications added. Tap + Add Qualification below or Skip.</span>`;
       return;
     }
 
@@ -926,20 +903,20 @@ function renderQualificationsList() {
         </div>
         <div class="form-grid">
           <div class="form-group full-width">
-            <label>Degree / Certificate / Course</label>
+            <label>Degree / Certificate</label>
             <input type="text" class="form-input" placeholder="e.g. B.S. in Computer Science" value="${escapeHtml(item.degree)}" data-field="degree" data-id="${item.id}">
           </div>
           <div class="form-group full-width">
-            <label>University / School / Institution</label>
-            <input type="text" class="form-input" placeholder="e.g. Stanford University" value="${escapeHtml(item.institution)}" data-field="institution" data-id="${item.id}">
+            <label>College / University / School</label>
+            <input type="text" class="form-input" placeholder="e.g. IIT Kanpur" value="${escapeHtml(item.institution)}" data-field="institution" data-id="${item.id}">
           </div>
           <div class="form-group">
             <label>Year / Duration</label>
-            <input type="text" class="form-input" placeholder="e.g. 2018 – 2022" value="${escapeHtml(item.year)}" data-field="year" data-id="${item.id}">
+            <input type="text" class="form-input" placeholder="e.g. 2015 – 2019" value="${escapeHtml(item.year)}" data-field="year" data-id="${item.id}">
           </div>
           <div class="form-group">
-            <label>Grade / Honors / Score</label>
-            <input type="text" class="form-input" placeholder="e.g. GPA 3.9 / First Class" value="${escapeHtml(item.score)}" data-field="score" data-id="${item.id}">
+            <label>Grade / Score</label>
+            <input type="text" class="form-input" placeholder="e.g. GPA 3.85 / First Class" value="${escapeHtml(item.score)}" data-field="score" data-id="${item.id}">
           </div>
         </div>
       `;
@@ -982,7 +959,7 @@ function renderSkillsChips() {
 
   const count = appState.skills.length;
   countLabels.forEach((lbl) => {
-    if (lbl) lbl.textContent = `${count} skill${count === 1 ? "" : "s"} selected`;
+    if (lbl) lbl.textContent = `${count} skill${count === 1 ? "" : "s"}`;
   });
 
   containers.forEach((container) => {
@@ -990,7 +967,7 @@ function renderSkillsChips() {
     container.innerHTML = "";
 
     if (count === 0) {
-      container.innerHTML = `<span style="font-size: 0.78rem; color: #64748b; padding: 4px;">No skills added yet. Click any basic office skill (Excel, Tally, Word) or role suggestions above!</span>`;
+      container.innerHTML = `<span style="font-size: 0.76rem; color: #64748b; padding: 4px;">No skills added yet. Tap any skill button above!</span>`;
       return;
     }
 
@@ -1027,7 +1004,7 @@ function renderExperienceList() {
     container.innerHTML = "";
 
     if (appState.experience.length === 0) {
-      container.innerHTML = `<span style="font-size: 0.78rem; color: #64748b; padding: 4px;">No experience added. Click + Add Experience below or Skip.</span>`;
+      container.innerHTML = `<span style="font-size: 0.78rem; color: #64748b; padding: 4px;">No experience added. Tap + Add Experience below or Skip.</span>`;
       return;
     }
 
@@ -1036,7 +1013,7 @@ function renderExperienceList() {
       card.className = "dynamic-item-card";
       card.innerHTML = `
         <div class="card-top-bar">
-          <span class="item-index-badge">#${index + 1} Experience / Project</span>
+          <span class="item-index-badge">#${index + 1} Role / Project</span>
           <button type="button" class="btn-danger-icon" title="Remove" data-remove-e="${item.id}">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="3 6 5 6 21 6"></polyline>
@@ -1047,19 +1024,19 @@ function renderExperienceList() {
         <div class="form-grid">
           <div class="form-group full-width">
             <label>Job Title / Role / Project Name</label>
-            <input type="text" class="form-input" placeholder="e.g. Senior Software Engineer" value="${escapeHtml(item.title)}" data-field="title" data-id="${item.id}">
+            <input type="text" class="form-input" placeholder="e.g. Lead Software Engineer" value="${escapeHtml(item.title)}" data-field="title" data-id="${item.id}">
           </div>
           <div class="form-group">
             <label>Company / Organization</label>
-            <input type="text" class="form-input" placeholder="e.g. Google / Microsoft" value="${escapeHtml(item.company)}" data-field="company" data-id="${item.id}">
+            <input type="text" class="form-input" placeholder="e.g. Nexus Tech" value="${escapeHtml(item.company)}" data-field="company" data-id="${item.id}">
           </div>
           <div class="form-group">
             <label>Period / Duration</label>
             <input type="text" class="form-input" placeholder="e.g. 2021 – Present" value="${escapeHtml(item.period)}" data-field="period" data-id="${item.id}">
           </div>
           <div class="form-group full-width">
-            <label>Responsibilities & Key Achievements</label>
-            <textarea rows="3" class="form-input form-textarea" placeholder="• Key achievement with metrics...\n• Project leadership and impact..." data-field="description" data-id="${item.id}">${escapeHtml(item.description)}</textarea>
+            <label>Description & Achievements</label>
+            <textarea rows="3" class="form-input form-textarea" placeholder="• Key contributions and accomplishments..." data-field="description" data-id="${item.id}">${escapeHtml(item.description)}</textarea>
           </div>
         </div>
       `;
@@ -1090,7 +1067,7 @@ function renderExperienceList() {
 }
 
 // ==========================================================================
-// Theme Customizers (Color Palette, Fonts)
+// Theme Customizers
 // ==========================================================================
 function bindThemeCustomizers() {
   const colorDots = document.querySelectorAll(".color-dot");
@@ -1153,7 +1130,72 @@ function syncStyleControls() {
 }
 
 // ==========================================================================
-// Header Actions (Sample Data, Clear, Print/PDF)
+// Zoom & Auto-Fit Preview Container
+// ==========================================================================
+function bindZoomFit() {
+  const zoomBtn = document.getElementById("btn-zoom-fit");
+  if (zoomBtn) {
+    zoomBtn.addEventListener("click", () => {
+      applyZoomFit(!appState.zoomFit);
+    });
+  }
+}
+
+function applyZoomFit(fit) {
+  appState.zoomFit = fit;
+  saveToStorage();
+
+  const container = document.getElementById("a4-sheet-container");
+  const zoomBtn = document.getElementById("btn-zoom-fit");
+
+  if (container) {
+    container.classList.toggle("fit-mobile", fit);
+  }
+
+  if (zoomBtn) {
+    zoomBtn.textContent = fit ? "🔍 100% Zoom" : "🔍 Fit Screen";
+  }
+}
+
+// ==========================================================================
+// Mobile Navigation & Sticky Action Bar
+// ==========================================================================
+function bindMobileNavigation() {
+  const previewNavBtn = document.getElementById("btn-mobile-nav-preview");
+  const mobilePreviewEditBtn = document.getElementById("btn-mobile-preview-edit");
+  const mobilePreviewDownloadBtn = document.getElementById("btn-mobile-preview-download");
+
+  // Mobile Bottom Nav Items
+  document.querySelectorAll(".mobile-nav-item[data-target-view]").forEach((item) => {
+    item.addEventListener("click", () => {
+      const targetView = item.getAttribute("data-target-view");
+      if (targetView) {
+        switchView(targetView);
+      }
+    });
+  });
+
+  if (previewNavBtn) {
+    previewNavBtn.addEventListener("click", () => {
+      setMobilePreviewActive(true);
+    });
+  }
+
+  if (mobilePreviewEditBtn) {
+    mobilePreviewEditBtn.addEventListener("click", () => {
+      setMobilePreviewActive(false);
+    });
+  }
+
+  if (mobilePreviewDownloadBtn) {
+    mobilePreviewDownloadBtn.addEventListener("click", () => {
+      window.print();
+    });
+  }
+}
+
+// ==========================================================================
+// Header Actions (Sample, Clear, PDF Print)
 // ==========================================================================
 function bindHeaderActions() {
   document.getElementById("btn-sample").addEventListener("click", () => {
@@ -1168,7 +1210,7 @@ function bindHeaderActions() {
     setDensity("auto", false);
     setWizardStep(1);
     onStateChange();
-    showToast("Sample data loaded successfully!", "success");
+    showToast("Sample data loaded! 🎉", "success");
   });
 
   document.getElementById("btn-clear").addEventListener("click", () => {
@@ -1221,69 +1263,6 @@ function syncAllInputsWithState() {
 }
 
 // ==========================================================================
-// Mobile & Android Navigation & Floating Preview FAB
-// ==========================================================================
-function bindMobileNavigation() {
-  const tabEditorBtn = document.getElementById("tab-editor-btn");
-  const tabPreviewBtn = document.getElementById("tab-preview-btn");
-  const editorPane = document.getElementById("editor-pane");
-  const previewPane = document.getElementById("preview-pane");
-  const previewFab = document.getElementById("mobile-preview-fab");
-  const mobilePdfBtn = document.getElementById("btn-mobile-pdf");
-
-  function showMobileEditor() {
-    if (tabEditorBtn) tabEditorBtn.classList.add("active");
-    if (tabPreviewBtn) tabPreviewBtn.classList.remove("active");
-    if (editorPane) editorPane.classList.remove("view-preview");
-    if (previewPane) previewPane.classList.remove("view-editor");
-  }
-
-  function showMobilePreview() {
-    if (tabPreviewBtn) tabPreviewBtn.classList.add("active");
-    if (tabEditorBtn) tabEditorBtn.classList.remove("active");
-    if (editorPane) editorPane.classList.add("view-preview");
-    if (previewPane) previewPane.classList.add("view-editor");
-    // Scroll to top of preview
-    const sheetWrapper = document.querySelector(".resume-sheet-wrapper");
-    if (sheetWrapper) sheetWrapper.scrollTop = 0;
-  }
-
-  if (tabEditorBtn) tabEditorBtn.addEventListener("click", showMobileEditor);
-  if (tabPreviewBtn) tabPreviewBtn.addEventListener("click", showMobilePreview);
-
-  // Floating Action Button (FAB) toggles preview
-  if (previewFab) {
-    previewFab.addEventListener("click", () => {
-      const isCurrentlyPreviewing = previewPane && previewPane.classList.contains("view-editor");
-      if (isCurrentlyPreviewing) {
-        showMobileEditor();
-        previewFab.querySelector(".fab-text").textContent = "Live Preview";
-      } else {
-        showMobilePreview();
-        previewFab.querySelector(".fab-text").textContent = "Edit Resume";
-      }
-    });
-  }
-
-  // Mobile Bottom Nav Items
-  document.querySelectorAll(".mobile-nav-item").forEach((item) => {
-    item.addEventListener("click", () => {
-      const targetView = item.getAttribute("data-target-view");
-      if (targetView) {
-        showMobileEditor();
-        switchView(targetView);
-      }
-    });
-  });
-
-  if (mobilePdfBtn) {
-    mobilePdfBtn.addEventListener("click", () => {
-      window.print();
-    });
-  }
-}
-
-// ==========================================================================
 // State Change Trigger
 // ==========================================================================
 function onStateChange() {
@@ -1323,7 +1302,7 @@ function createSkillGaugeHtml(skills) {
 }
 
 // ==========================================================================
-// LIVE RESUME CANVAS RENDERER (Glorified Lines & A4 Layout)
+// LIVE RESUME CANVAS RENDERER
 // ==========================================================================
 function renderResumeCanvas() {
   const canvas = document.getElementById("resume-canvas");
@@ -1350,7 +1329,6 @@ function renderResumeCanvas() {
 
   const metaHtml = metaParts.length > 0 ? metaParts.join(" &bull; ") : "";
 
-  // Glorified Footer Anchor Bar
   const footerHtml = `
     <footer class="r-glorified-footer">
       <span>Curriculum Vitae &bull; ${escapeHtml(personal.name || "Resume")}</span>
@@ -1384,17 +1362,17 @@ function renderResumeCanvas() {
 }
 
 // --------------------------------------------------------------------------
-// Template 1: Modern Tech (Glorified Lines & Skill Gauge Progress Tracks)
+// Template 1: Modern Tech
 // --------------------------------------------------------------------------
 function generateModernTemplate(personal, qualifications, skills, experience, metaHtml) {
-  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span class="empty-placeholder">Your Full Name</span>`;
-  const headlineDisplay = personal.headline ? `<div style="font-size: 1.05rem; font-weight: 600; color: var(--accent-color); margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : "";
+  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span style="color:#94a3b8; font-style:italic;">Your Name</span>`;
+  const headlineDisplay = personal.headline ? `<div style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : "";
   const summaryDisplay = personal.summary ? `<div class="r-summary-callout">${escapeHtml(personal.summary)}</div>` : "";
 
   let expHtml = "";
   if (experience && experience.length > 0) {
     expHtml = `
-      <section style="margin-bottom: 12px;">
+      <section style="margin-bottom: 10px;">
         ${createSectionBar("Work Experience")}
         ${experience.map((e) => `
           <div class="r-timeline-rail">
@@ -1413,16 +1391,16 @@ function generateModernTemplate(personal, qualifications, skills, experience, me
   let qualHtml = "";
   if (qualifications && qualifications.length > 0) {
     qualHtml = `
-      <section style="margin-bottom: 12px;">
+      <section style="margin-bottom: 10px;">
         ${createSectionBar("Qualifications")}
         ${qualifications.map((q) => `
           <div class="r-qual-frame">
             <div class="r-qual-header">
-              <strong class="r-qual-degree">${escapeHtml(q.degree || "Degree / Course")}</strong>
+              <strong class="r-qual-degree">${escapeHtml(q.degree || "Degree")}</strong>
               <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">${escapeHtml(q.year || "")}</span>
             </div>
             <div class="r-qual-inst">${escapeHtml(q.institution || "")}</div>
-            ${q.score ? `<div class="r-qual-score"><strong>Honors:</strong> ${escapeHtml(q.score)}</div>` : ""}
+            ${q.score ? `<div class="r-qual-score"><strong>Score:</strong> ${escapeHtml(q.score)}</div>` : ""}
           </div>
         `).join("")}
       </section>
@@ -1432,8 +1410,8 @@ function generateModernTemplate(personal, qualifications, skills, experience, me
   let skillsHtml = "";
   if (skills && skills.length > 0) {
     skillsHtml = `
-      <section style="margin-bottom: 8px;">
-        ${createSectionBar("Key Skills & Competencies")}
+      <section style="margin-bottom: 6px;">
+        ${createSectionBar("Skills & Competencies")}
         ${createSkillGaugeHtml(skills)}
       </section>
     `;
@@ -1441,7 +1419,7 @@ function generateModernTemplate(personal, qualifications, skills, experience, me
 
   return `
     <div style="flex: 1; display: flex; flex-direction: column;">
-      <header style="margin-bottom: 10px;">
+      <header style="margin-bottom: 8px;">
         <h1 class="r-name" style="font-weight: 800; color: #0f172a; line-height: 1.1;">${nameDisplay}</h1>
         ${headlineDisplay}
         <div class="r-glorified-header-line">
@@ -1449,7 +1427,7 @@ function generateModernTemplate(personal, qualifications, skills, experience, me
           <div class="g-diamond-node"></div>
           <div class="g-line-thin"></div>
         </div>
-        ${metaHtml ? `<div style="font-size: 0.8rem; color: #475569; margin-top: 4px;">${metaHtml}</div>` : ""}
+        ${metaHtml ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 4px;">${metaHtml}</div>` : ""}
       </header>
 
       ${summaryDisplay}
@@ -1461,30 +1439,26 @@ function generateModernTemplate(personal, qualifications, skills, experience, me
 }
 
 // --------------------------------------------------------------------------
-// Template 2: Fresher / Entry-Level (Glorified Education & Competency Lines)
+// Template 2: Fresher
 // --------------------------------------------------------------------------
 function generateFresherTemplate(personal, qualifications, skills, experience, metaHtml) {
-  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span class="empty-placeholder">Your Full Name</span>`;
+  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span style="color:#94a3b8; font-style:italic;">Your Name</span>`;
   const headlineDisplay = personal.headline ? `<div style="font-size: 1rem; font-weight: 600; color: var(--accent-color); margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : "";
-  const summaryDisplay = personal.summary ? `
-    <div class="r-summary-callout">
-      ${escapeHtml(personal.summary)}
-    </div>
-  ` : "";
+  const summaryDisplay = personal.summary ? `<div class="r-summary-callout">${escapeHtml(personal.summary)}</div>` : "";
 
   let qualHtml = "";
   if (qualifications && qualifications.length > 0) {
     qualHtml = `
-      <section style="margin-bottom: 12px;">
-        ${createSectionBar("Education & Academic Qualifications")}
+      <section style="margin-bottom: 10px;">
+        ${createSectionBar("Education & Qualifications")}
         ${qualifications.map((q) => `
           <div class="r-qual-frame">
             <div class="r-qual-header">
-              <strong class="r-qual-degree">${escapeHtml(q.degree || "Degree / Course")}</strong>
-              <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">${escapeHtml(q.year || "")}</span>
+              <strong class="r-qual-degree">${escapeHtml(q.degree || "Degree")}</strong>
+              <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">${escapeHtml(q.year || "")}</span>
             </div>
             <div class="r-qual-inst">${escapeHtml(q.institution || "")}</div>
-            ${q.score ? `<div class="r-qual-score"><strong>Academic Performance:</strong> ${escapeHtml(q.score)}</div>` : ""}
+            ${q.score ? `<div class="r-qual-score"><strong>Performance:</strong> ${escapeHtml(q.score)}</div>` : ""}
           </div>
         `).join("")}
       </section>
@@ -1494,8 +1468,8 @@ function generateFresherTemplate(personal, qualifications, skills, experience, m
   let skillsHtml = "";
   if (skills && skills.length > 0) {
     skillsHtml = `
-      <section style="margin-bottom: 12px;">
-        ${createSectionBar("Core Skills & Proficiency Gauges")}
+      <section style="margin-bottom: 10px;">
+        ${createSectionBar("Skills & Proficiency Gauges")}
         ${createSkillGaugeHtml(skills)}
       </section>
     `;
@@ -1504,12 +1478,12 @@ function generateFresherTemplate(personal, qualifications, skills, experience, m
   let expHtml = "";
   if (experience && experience.length > 0) {
     expHtml = `
-      <section style="margin-bottom: 8px;">
+      <section style="margin-bottom: 6px;">
         ${createSectionBar("Projects, Internships & Experience")}
         ${experience.map((e) => `
           <div class="r-timeline-rail">
             <div class="r-timeline-header">
-              <span class="r-timeline-title">${escapeHtml(e.title || "Project / Role")}</span>
+              <span class="r-timeline-title">${escapeHtml(e.title || "Project")}</span>
               <span class="r-timeline-date">${escapeHtml(e.period || "")}</span>
             </div>
             <div class="r-timeline-org">${escapeHtml(e.company || "")}</div>
@@ -1522,7 +1496,7 @@ function generateFresherTemplate(personal, qualifications, skills, experience, m
 
   return `
     <div style="flex: 1; display: flex; flex-direction: column;">
-      <header style="margin-bottom: 10px;">
+      <header style="margin-bottom: 8px;">
         <h1 class="r-name" style="font-weight: 800; color: #0f172a; line-height: 1.1;">${nameDisplay}</h1>
         ${headlineDisplay}
         <div class="r-glorified-header-line">
@@ -1530,7 +1504,7 @@ function generateFresherTemplate(personal, qualifications, skills, experience, m
           <div class="g-diamond-node"></div>
           <div class="g-line-thin"></div>
         </div>
-        ${metaHtml ? `<div style="font-size: 0.8rem; color: #475569; margin-top: 4px;">${metaHtml}</div>` : ""}
+        ${metaHtml ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 4px;">${metaHtml}</div>` : ""}
       </header>
 
       ${summaryDisplay}
@@ -1542,21 +1516,17 @@ function generateFresherTemplate(personal, qualifications, skills, experience, m
 }
 
 // --------------------------------------------------------------------------
-// Template 3: Executive Navy (Corporate Dual Hairlines & Strategic Gauge Bars)
+// Template 3: Executive Leadership
 // --------------------------------------------------------------------------
 function generateExecutiveTemplate(personal, qualifications, skills, experience, metaHtml) {
-  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span class="empty-placeholder">Your Full Name</span>`;
-  const headlineDisplay = personal.headline ? `<div style="font-size: 1.05rem; font-weight: 600; color: var(--accent-color); letter-spacing: 0.04em;">${escapeHtml(personal.headline)}</div>` : "";
-  const summaryDisplay = personal.summary ? `
-    <div class="r-summary-callout" style="border-left-width: 4px;">
-      ${escapeHtml(personal.summary)}
-    </div>
-  ` : "";
+  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span style="color:#94a3b8; font-style:italic;">Your Name</span>`;
+  const headlineDisplay = personal.headline ? `<div style="font-size: 1rem; font-weight: 600; color: var(--accent-color); letter-spacing: 0.04em;">${escapeHtml(personal.headline)}</div>` : "";
+  const summaryDisplay = personal.summary ? `<div class="r-summary-callout" style="border-left-width: 4px;">${escapeHtml(personal.summary)}</div>` : "";
 
   let expHtml = "";
   if (experience && experience.length > 0) {
     expHtml = `
-      <section style="margin-bottom: 12px;">
+      <section style="margin-bottom: 10px;">
         ${createSectionBar("Executive Leadership & Experience")}
         ${experience.map((e) => `
           <div class="r-timeline-rail">
@@ -1575,7 +1545,7 @@ function generateExecutiveTemplate(personal, qualifications, skills, experience,
   let qualHtml = "";
   if (qualifications && qualifications.length > 0) {
     qualHtml = `
-      <section style="margin-bottom: 12px;">
+      <section style="margin-bottom: 10px;">
         ${createSectionBar("Credentials & Qualifications")}
         ${qualifications.map((q) => `
           <div class="r-qual-frame">
@@ -1593,7 +1563,7 @@ function generateExecutiveTemplate(personal, qualifications, skills, experience,
   let skillsHtml = "";
   if (skills && skills.length > 0) {
     skillsHtml = `
-      <section style="margin-bottom: 8px;">
+      <section style="margin-bottom: 6px;">
         ${createSectionBar("Core Leadership Competencies")}
         ${createSkillGaugeHtml(skills)}
       </section>
@@ -1602,17 +1572,17 @@ function generateExecutiveTemplate(personal, qualifications, skills, experience,
 
   return `
     <div style="flex: 1; display: flex; flex-direction: column;">
-      <header style="text-align: center; margin-bottom: 12px;">
+      <header style="text-align: center; margin-bottom: 10px;">
         <h1 class="r-name" style="font-weight: 800; color: #0f172a; letter-spacing: 0.05em; text-transform: uppercase;">${nameDisplay}</h1>
         ${headlineDisplay}
-        <div class="r-glorified-header-line" style="justify-content: center; max-width: 320px; margin: 8px auto 6px auto;">
+        <div class="r-glorified-header-line" style="justify-content: center; max-width: 280px; margin: 6px auto 4px auto;">
           <div class="g-line-thin"></div>
           <div class="g-diamond-node"></div>
           <div class="g-line-thick"></div>
           <div class="g-diamond-node"></div>
           <div class="g-line-thin"></div>
         </div>
-        ${metaHtml ? `<div style="font-size: 0.8rem; color: #475569;">${metaHtml}</div>` : ""}
+        ${metaHtml ? `<div style="font-size: 0.78rem; color: #475569;">${metaHtml}</div>` : ""}
       </header>
 
       ${summaryDisplay}
@@ -1624,32 +1594,23 @@ function generateExecutiveTemplate(personal, qualifications, skills, experience,
 }
 
 // --------------------------------------------------------------------------
-// Template 4: Neo Creative (Full-Height Sidebar Rail & Graphic Gauges)
+// Template 4: Creative Sidebar
 // --------------------------------------------------------------------------
 function generateCreativeTemplate(personal, qualifications, skills, experience, formattedDob, age) {
-  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span class="empty-placeholder">Your Name</span>`;
+  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span style="color:#94a3b8; font-style:italic;">Your Name</span>`;
   const initials = personal.name ? personal.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() : "CV";
-  const headlineDisplay = personal.headline ? `<div style="font-size: 1.05rem; font-weight: 600; color: var(--accent-color); margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : "";
-  const summaryDisplay = personal.summary ? `
-    <div class="r-summary-callout">
-      ${escapeHtml(personal.summary)}
-    </div>
-  ` : "";
+  const headlineDisplay = personal.headline ? `<div style="font-size: 0.98rem; font-weight: 600; color: var(--accent-color); margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : "";
+  const summaryDisplay = personal.summary ? `<div class="r-summary-callout">${escapeHtml(personal.summary)}</div>` : "";
 
   return `
     <aside class="r-sidebar">
       <div class="r-sidebar-avatar">${initials}</div>
 
       <div>
-        <h4 style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">
-          Contact Details
+        <h4 style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 6px;">
+          Contact
         </h4>
-        ${formattedDob ? `
-          <div class="r-sidebar-item">
-            <strong>Date of Birth</strong>
-            ${formattedDob} ${age !== null ? `(${age} yrs)` : ""}
-          </div>
-        ` : ""}
+        ${formattedDob ? `<div class="r-sidebar-item"><strong>DOB</strong>${formattedDob} ${age !== null ? `(${age} yrs)` : ""}</div>` : ""}
         ${personal.location ? `<div class="r-sidebar-item"><strong>Location</strong>${escapeHtml(personal.location)}</div>` : ""}
         ${personal.email ? `<div class="r-sidebar-item"><strong>Email</strong>${escapeHtml(personal.email)}</div>` : ""}
         ${personal.phone ? `<div class="r-sidebar-item"><strong>Phone</strong>${escapeHtml(personal.phone)}</div>` : ""}
@@ -1657,15 +1618,15 @@ function generateCreativeTemplate(personal, qualifications, skills, experience, 
 
       ${skills && skills.length > 0 ? `
         <div>
-          <h4 style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">
-            Skills & Tools
+          <h4 style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 6px;">
+            Skills
           </h4>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
             ${skills.map((s) => `
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <div style="font-size: 0.78rem; font-weight: 600; color: #1e293b; display: flex; justify-content: space-between;">
+              <div style="display: flex; flex-direction: column; gap: 1px;">
+                <div style="font-size: 0.74rem; font-weight: 600; color: #1e293b; display: flex; justify-content: space-between;">
                   <span>${escapeHtml(s.name)}</span>
-                  <span style="font-size: 0.68rem; color: #64748b;">${escapeHtml(s.level)}</span>
+                  <span style="font-size: 0.65rem; color: #64748b;">${escapeHtml(s.level)}</span>
                 </div>
                 <div class="r-skill-gauge-track" style="height: 4px;">
                   <div class="r-skill-gauge-fill" style="width: ${getSkillPercentage(s.level)};"></div>
@@ -1678,21 +1639,20 @@ function generateCreativeTemplate(personal, qualifications, skills, experience, 
 
       ${qualifications && qualifications.length > 0 ? `
         <div>
-          <h4 style="font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">
+          <h4 style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--accent-color); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 6px;">
             Education
           </h4>
           ${qualifications.map((q) => `
-            <div style="margin-bottom: 8px; font-size: 0.8rem; background: #fff; padding: 6px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+            <div style="margin-bottom: 6px; font-size: 0.76rem; background: #fff; padding: 4px 6px; border-radius: 4px; border: 1px solid #e2e8f0;">
               <strong style="color:#0f172a; display: block;">${escapeHtml(q.degree || "Degree")}</strong>
               <div style="color: #475569;">${escapeHtml(q.institution || "")}</div>
-              <div style="color: #64748b; font-size: 0.74rem;">${escapeHtml(q.year || "")}</div>
             </div>
           `).join("")}
         </div>
       ` : ""}
 
-      <div style="margin-top: auto; font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase;">
-        A4 Format &bull; CV
+      <div style="margin-top: auto; font-size: 0.68rem; color: #94a3b8; text-transform: uppercase;">
+        Standard A4 Format
       </div>
     </aside>
 
@@ -1727,9 +1687,7 @@ function generateCreativeTemplate(personal, qualifications, skills, experience, 
 
       <footer class="r-glorified-footer" style="margin-top: auto;">
         <span>${escapeHtml(personal.name || "Resume")}</span>
-        <div class="r-footer-ornament">
-          <span></span><i></i><span></span>
-        </div>
+        <div class="r-footer-ornament"><span></span><i></i><span></span></div>
         <span>Standard A4</span>
       </footer>
     </main>
@@ -1737,59 +1695,59 @@ function generateCreativeTemplate(personal, qualifications, skills, experience, 
 }
 
 // --------------------------------------------------------------------------
-// Template 5: ATS Minimalist (Clean Structured Divider Rules)
+// Template 5: ATS Clean Scan
 // --------------------------------------------------------------------------
 function generateAtsTemplate(personal, qualifications, skills, experience, metaParts) {
-  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span class="empty-placeholder">Your Full Name</span>`;
+  const nameDisplay = personal.name ? escapeHtml(personal.name) : `<span style="color:#94a3b8; font-style:italic;">Your Name</span>`;
   const summaryDisplay = personal.summary ? `
-    <div style="margin-bottom: 12px;">
-      <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 6px;">Summary</h3>
-      <p style="font-size: 0.86rem; color: #1e293b; line-height: 1.55;">${escapeHtml(personal.summary)}</p>
+    <div style="margin-bottom: 10px;">
+      <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 4px;">Summary</h3>
+      <p style="font-size: 0.83rem; color: #1e293b; line-height: 1.5;">${escapeHtml(personal.summary)}</p>
     </div>
   ` : "";
 
   return `
     <div style="flex: 1; display: flex; flex-direction: column;">
-      <header style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px;">
+      <header style="border-bottom: 2px solid #0f172a; padding-bottom: 6px; margin-bottom: 10px;">
         <h1 class="r-name" style="font-weight: 700; color: #000;">${nameDisplay}</h1>
-        ${personal.headline ? `<div style="font-size: 0.95rem; font-weight: 600; color: #334155; margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : ""}
-        ${metaParts.length > 0 ? `<div style="font-size: 0.82rem; color: #475569; margin-top: 4px;">${metaParts.join(" | ")}</div>` : ""}
+        ${personal.headline ? `<div style="font-size: 0.92rem; font-weight: 600; color: #334155; margin-top: 2px;">${escapeHtml(personal.headline)}</div>` : ""}
+        ${metaParts.length > 0 ? `<div style="font-size: 0.78rem; color: #475569; margin-top: 3px;">${metaParts.join(" | ")}</div>` : ""}
       </header>
 
       ${summaryDisplay}
 
       ${skills && skills.length > 0 ? `
-        <div style="margin-bottom: 12px;">
-          <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 6px;">Technical & Office Skills</h3>
+        <div style="margin-bottom: 10px;">
+          <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 4px;">Key Skills & Competencies</h3>
           ${createSkillGaugeHtml(skills)}
         </div>
       ` : ""}
 
       ${experience && experience.length > 0 ? `
-        <div style="margin-bottom: 12px;">
-          <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 6px;">Work Experience</h3>
+        <div style="margin-bottom: 10px;">
+          <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 4px;">Work Experience</h3>
           ${experience.map((e) => `
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <strong style="font-size: 0.94rem; color: #000;">${escapeHtml(e.title || "Job Title")} — ${escapeHtml(e.company || "")}</strong>
-                <span style="font-size: 0.8rem; color: #475569;">${escapeHtml(e.period || "")}</span>
+                <strong style="font-size: 0.9rem; color: #000;">${escapeHtml(e.title || "Job Title")} — ${escapeHtml(e.company || "")}</strong>
+                <span style="font-size: 0.76rem; color: #475569;">${escapeHtml(e.period || "")}</span>
               </div>
-              ${e.description ? `<div style="font-size: 0.83rem; color: #1e293b; margin-top: 3px; white-space: pre-line;">${escapeHtml(e.description)}</div>` : ""}
+              ${e.description ? `<div style="font-size: 0.8rem; color: #1e293b; margin-top: 2px; white-space: pre-line;">${escapeHtml(e.description)}</div>` : ""}
             </div>
           `).join("")}
         </div>
       ` : ""}
 
       ${qualifications && qualifications.length > 0 ? `
-        <div style="margin-bottom: 12px;">
-          <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 6px;">Education & Qualifications</h3>
+        <div style="margin-bottom: 10px;">
+          <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; border-bottom: 1.5px solid #334155; padding-bottom: 2px; margin-bottom: 4px;">Education</h3>
           ${qualifications.map((q) => `
-            <div style="margin-bottom: 8px;">
+            <div style="margin-bottom: 6px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <strong style="font-size: 0.92rem; color: #000;">${escapeHtml(q.degree || "Degree")} — ${escapeHtml(q.institution || "")}</strong>
-                <span style="font-size: 0.8rem; color: #475569;">${escapeHtml(q.year || "")}</span>
+                <strong style="font-size: 0.88rem; color: #000;">${escapeHtml(q.degree || "Degree")} — ${escapeHtml(q.institution || "")}</strong>
+                <span style="font-size: 0.76rem; color: #475569;">${escapeHtml(q.year || "")}</span>
               </div>
-              ${q.score ? `<div style="font-size: 0.8rem; color: #475569;">${escapeHtml(q.score)}</div>` : ""}
+              ${q.score ? `<div style="font-size: 0.76rem; color: #475569;">${escapeHtml(q.score)}</div>` : ""}
             </div>
           `).join("")}
         </div>
@@ -1803,10 +1761,11 @@ function generateAtsTemplate(personal, qualifications, skills, experience, metaP
 // ==========================================================================
 function showToast(message, type = "info") {
   const container = document.getElementById("toast-container");
+  if (!container) return;
   const toast = document.createElement("div");
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       ${type === "success" 
         ? '<polyline points="20 6 9 17 4 12"></polyline>' 
         : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>'}
@@ -1817,10 +1776,10 @@ function showToast(message, type = "info") {
 
   setTimeout(() => {
     toast.style.opacity = "0";
-    toast.style.transform = "translateY(10px)";
-    toast.style.transition = "all 0.25s ease";
-    setTimeout(() => toast.remove(), 250);
-  }, 2500);
+    toast.style.transform = "translateY(8px)";
+    toast.style.transition = "all 0.2s ease";
+    setTimeout(() => toast.remove(), 200);
+  }, 2200);
 }
 
 // ==========================================================================

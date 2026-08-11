@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>QUICKNIKH RESUME — Instant Pro Resume Builder</title>
-  <meta name="description" content="Generate sleek, professional, ATS-friendly resumes instantly with Name, Qualifications, Skills, Experience, and DOB. Optimized for Android and Desktop.">
+  <meta name="description" content="Fast, clean, professional single-page A4 resume generator. Optimized for Android Chrome and Desktop.">
   
   <!-- PWA & Mobile Web App Meta Tags -->
   <link rel="manifest" href="manifest.json">
@@ -19,7 +19,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="mode-auto">
@@ -29,11 +29,11 @@
       <img src="assets/panda-logo.svg" alt="Panda App Icon" class="pwa-banner-icon">
       <div>
         <strong>Install QUICKNIKH App</strong>
-        <span>1-Tap home screen access & offline resume editing</span>
+        <span>1-Tap home screen access & offline editing</span>
       </div>
     </div>
     <div class="pwa-banner-actions">
-      <button type="button" id="btn-install-pwa" class="btn btn-primary btn-sm">📲 Install App</button>
+      <button type="button" id="btn-install-pwa" class="btn btn-primary btn-sm">📲 Install</button>
       <button type="button" id="btn-dismiss-pwa" class="btn-close-banner" aria-label="Dismiss">✕</button>
     </div>
   </div>
@@ -42,40 +42,41 @@
   <header class="app-header">
     <div class="header-brand">
       <div class="brand-logo panda-mascot-logo" title="QUICKNIKH RESUME Mascot">
-        <img src="assets/panda-logo.svg" alt="Panda with Straw Hat Logo" class="panda-logo-img">
+        <img src="assets/panda-logo.svg" alt="Panda with Straw Hat" class="panda-logo-img">
       </div>
       <div>
         <h1 class="brand-title">QUICKNIKH <span>RESUME</span></h1>
-        <p class="brand-subtitle">Effortless, dynamic & professional resume maker</p>
+        <p class="brand-subtitle">Fast & Simple A4 Resume Builder</p>
       </div>
     </div>
 
-    <!-- Desktop vs Android View Mode Toggle Switcher -->
+    <!-- Mode Switcher Pill (Desktop/Tablet) -->
     <div class="view-mode-switcher-container">
       <div class="mode-switch-pills" id="mode-switch-pills">
-        <button type="button" class="mode-pill active" data-mode="auto" title="Auto-detect based on screen size">
+        <button type="button" class="mode-pill active" data-mode="auto" title="Auto-detect screen size">
           <span>🔄 Auto</span>
         </button>
-        <button type="button" class="mode-pill" data-mode="desktop" title="Force full desktop split view">
+        <button type="button" class="mode-pill" data-mode="desktop" title="Force Desktop split view">
           <span>💻 Desktop</span>
         </button>
-        <button type="button" class="mode-pill" data-mode="android" title="Switch to touch-optimized mobile app view">
-          <span>📱 Android</span>
+        <button type="button" class="mode-pill" data-mode="android" title="Switch to mobile view">
+          <span>📱 Mobile</span>
         </button>
       </div>
     </div>
 
+    <!-- Header Actions -->
     <div class="header-actions">
-      <button id="btn-sample" class="btn btn-secondary" title="Populate realistic demo details">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button id="btn-sample" class="btn btn-secondary btn-compact" title="Load sample profile">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="m18 15-6-6-6 6"/>
           <path d="M12 3v14"/>
         </svg>
-        <span class="btn-text">Sample Data</span>
+        <span class="btn-text">Sample</span>
       </button>
 
-      <button id="btn-clear" class="btn btn-ghost" title="Reset all fields">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button id="btn-clear" class="btn btn-ghost btn-compact" title="Reset all fields">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 6h18"/>
           <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
           <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
@@ -83,476 +84,283 @@
         <span class="btn-text">Clear</span>
       </button>
 
-      <button id="btn-print" class="btn btn-primary" title="Print or Save as standard A4 PDF">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button id="btn-print" class="btn btn-primary" title="Print or Save as PDF">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="6 9 6 2 18 2 18 9"/>
           <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
           <rect x="6" y="14" width="12" height="8"/>
         </svg>
-        <span>Download A4 PDF</span>
+        <span class="btn-print-text">Download PDF</span>
       </button>
     </div>
   </header>
 
   <!-- Main Container -->
   <main class="app-layout" id="app-layout">
-    <!-- Left Column: Form Editor & Tabbed Navigation -->
+    <!-- Left Column: Form Editor -->
     <section class="editor-pane" id="editor-pane">
-      <!-- Mobile View Toggle (Editor vs Preview) -->
-      <div class="editor-tabs-mobile" id="editor-tabs-mobile">
-        <button class="tab-btn active" id="tab-editor-btn">✏️ Form Editor</button>
-        <button class="tab-btn" id="tab-preview-btn">👁️ Live A4 Preview</button>
-      </div>
-
-      <!-- Main Navigation Tabs in Editor -->
-      <nav class="nav-tabs-bar">
-        <button class="nav-tab-btn active" data-view="types" id="nav-tab-types">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="14" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/>
+      
+      <!-- Primary Clean Navigation Tabs (Desktop & Tablet) -->
+      <nav class="nav-tabs-bar" id="main-nav-tabs">
+        <button class="nav-tab-btn active" data-view="wizard" id="nav-tab-wizard">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
           </svg>
-          <span>1. Resume Type</span>
-        </button>
-
-        <button class="nav-tab-btn" data-view="wizard" id="nav-tab-wizard">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          <span>2. Questions (Step-by-Step)</span>
+          <span>⚡ Step-by-Step</span>
         </button>
 
         <button class="nav-tab-btn" data-view="content" id="nav-tab-content">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 20h9"/>
             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
           </svg>
-          <span>3. All Details</span>
+          <span>📝 Edit All</span>
         </button>
 
         <button class="nav-tab-btn" data-view="style" id="nav-tab-style">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
             <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
             <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
             <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
             <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
           </svg>
-          <span>4. Theme</span>
+          <span>🎨 Templates & Style</span>
         </button>
       </nav>
 
-      <!-- VIEW 1: RESUME TYPE SELECTOR TAB -->
-      <div class="view-panel active" id="view-types">
-        <div class="panel-intro">
-          <h2>Select Your Resume Type</h2>
-          <p>Click any resume archetype below. Each template dynamically auto-scales to fill the whole A4 page!</p>
-        </div>
-
-        <div class="resume-types-grid" id="resume-types-grid">
-          <!-- Type 1: Tech & Engineering -->
-          <div class="type-card selected" data-type="tech">
-            <div class="type-card-header">
-              <div class="type-icon bg-indigo">💻</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">Tech & Software Engineer</h3>
-            <p class="type-desc">Balanced 2-column layout with technical stacks, timeline nodes, and impact highlights.</p>
-            <div class="type-tags">
-              <span class="type-tag">2-Column</span>
-              <span class="type-tag">Timeline Nodes</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-
-          <!-- Type 2: Fresher & Graduate -->
-          <div class="type-card" data-type="fresher">
-            <div class="type-card-header">
-              <div class="type-icon bg-emerald">🎓</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">Fresher / Entry-Level</h3>
-            <p class="type-desc">Optimized for graduates. Automatically expands education GPA cards and skills to fill 1 full A4 page.</p>
-            <div class="type-tags">
-              <span class="type-tag">Education First</span>
-              <span class="type-tag">Full-Page Stretch</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-
-          <!-- Type 3: Executive & Management -->
-          <div class="type-card" data-type="executive">
-            <div class="type-card-header">
-              <div class="type-icon bg-amber">👔</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">Executive & Management</h3>
-            <p class="type-desc">Refined corporate navy layout with executive summary, strategic leadership timeline, and elegant typography.</p>
-            <div class="type-tags">
-              <span class="type-tag">Corporate Navy</span>
-              <span class="type-tag">Executive Summary</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-
-          <!-- Type 4: ATS-Optimized Scanner -->
-          <div class="type-card" data-type="ats">
-            <div class="type-card-header">
-              <div class="type-icon bg-slate">📄</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">ATS Clean Scan</h3>
-            <p class="type-desc">Streamlined, single-column layout strictly formatted to pass Applicant Tracking Systems with 100% scan rate.</p>
-            <div class="type-tags">
-              <span class="type-tag">Single Column</span>
-              <span class="type-tag">100% ATS Safe</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-
-          <!-- Type 5: Creative & Portfolio -->
-          <div class="type-card" data-type="creative">
-            <div class="type-card-header">
-              <div class="type-icon bg-violet">🎨</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">Creative & Designer</h3>
-            <p class="type-desc">High visual contrast with full-height 297mm sidebar, initials avatar, and elegant section hairlines.</p>
-            <div class="type-tags">
-              <span class="type-tag">Full-Height Sidebar</span>
-              <span class="type-tag">Initials Badge</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-
-          <!-- Type 6: Academic & Research -->
-          <div class="type-card" data-type="academic">
-            <div class="type-card-header">
-              <div class="type-icon bg-rose">🔬</div>
-              <div class="type-check-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="type-title">Academic & Scientific</h3>
-            <p class="type-desc">Structured for researchers and scholars. Emphasizes degrees, certifications, and scholarly serif styling.</p>
-            <div class="type-tags">
-              <span class="type-tag">Deep Credentials</span>
-              <span class="type-tag">Academic Serif</span>
-            </div>
-            <button class="btn btn-select-type" type="button">Select & Start Questions →</button>
-          </div>
-        </div>
-
-        <div class="panel-footer-action">
-          <button type="button" class="btn btn-primary btn-large full-width" id="btn-start-wizard">
-            <span>Start Guided Questions (One by One)</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- VIEW 2: STEP-BY-STEP QUESTION WIZARD (ONE BY ONE) -->
-      <div class="view-panel" id="view-wizard">
-        <!-- Progress Bar Header -->
+      <!-- VIEW 1: STEP-BY-STEP QUESTION WIZARD (DEFAULT) -->
+      <div class="view-panel active" id="view-wizard">
         <div class="wizard-header">
           <div class="wizard-step-info">
             <span class="wizard-step-badge" id="wizard-step-badge">Question 1 of 5</span>
-            <span class="wizard-step-title" id="wizard-step-title">Personal Name & Title</span>
+            <span class="wizard-step-title" id="wizard-step-title">Name & Title</span>
           </div>
           <div class="wizard-progress-bar">
             <div class="wizard-progress-fill" id="wizard-progress-fill" style="width: 20%;"></div>
           </div>
-          <!-- Step indicator dots -->
           <div class="wizard-step-dots">
-            <button class="wizard-dot active" data-step="1" title="1. Name & Title">1</button>
-            <button class="wizard-dot" data-step="2" title="2. Date of Birth">2</button>
-            <button class="wizard-dot" data-step="3" title="3. Qualifications">3</button>
-            <button class="wizard-dot" data-step="4" title="4. Skills">4</button>
-            <button class="wizard-dot" data-step="5" title="5. Experience">5</button>
+            <button type="button" class="wizard-dot active" data-step="1">1. Name</button>
+            <button type="button" class="wizard-dot" data-step="2">2. DOB & Info</button>
+            <button type="button" class="wizard-dot" data-step="3">3. Education</button>
+            <button type="button" class="wizard-dot" data-step="4">4. Skills</button>
+            <button type="button" class="wizard-dot" data-step="5">5. Experience</button>
           </div>
         </div>
 
-        <!-- Question Cards Container -->
         <div class="wizard-body">
-          <!-- QUESTION 1: NAME & TITLE & BIO OPTIONS -->
-          <div class="wizard-step-card active" id="w-step-1">
+          <!-- QUESTION 1: NAME & TITLE -->
+          <div class="wizard-step-card active" data-step-index="1">
             <div class="wizard-question-box">
               <div class="q-icon bg-indigo">👤</div>
               <div>
-                <h3 class="q-title">What is your Full Name & Title?</h3>
-                <p class="q-desc">Enter your name, headline, and bio. Pick ready-made title and bio options below or skip.</p>
+                <h3 class="q-title">What is your Name & Professional Title?</h3>
+                <p class="q-desc">Type your details or tap any ready-made suggestion below.</p>
               </div>
             </div>
+
             <div class="form-grid">
               <div class="form-group full-width">
-                <label for="w-input-name">Full Name</label>
+                <label for="w-input-name">Full Name <span class="required">*</span></label>
                 <input type="text" id="w-input-name" placeholder="e.g. Ramu" class="form-input" autocomplete="name">
               </div>
 
-              <!-- Professional Title / Headline with Options -->
+              <!-- Title Quick Chips -->
               <div class="form-group full-width">
                 <div class="picker-header">
-                  <label for="w-input-headline">Professional Title / Headline (Optional)</label>
-                  <span class="picker-helper-hint">✨ Click a title to auto-fill:</span>
+                  <label for="w-input-headline">Professional Headline / Title</label>
+                  <span class="picker-helper-hint">Tap to auto-fill:</span>
                 </div>
                 
-                <!-- Quick Title Option Buttons -->
-                <div class="chip-options-container">
-                  <button type="button" class="title-chip-btn" data-title="Senior Full-Stack Engineer">💻 Full-Stack Engineer</button>
+                <div class="chip-options-scroll">
+                  <button type="button" class="title-chip-btn" data-title="Full-Stack Software Engineer">💻 Full-Stack Engineer</button>
                   <button type="button" class="title-chip-btn" data-title="Frontend React Developer">⚛️ React Developer</button>
-                  <button type="button" class="title-chip-btn" data-title="Backend & Python Developer">🐍 Backend Engineer</button>
-                  <button type="button" class="title-chip-btn" data-title="Entry-Level Software Engineer / Graduate">🎓 Graduate / Fresher</button>
+                  <button type="button" class="title-chip-btn" data-title="Backend & Python Engineer">🐍 Python Developer</button>
+                  <button type="button" class="title-chip-btn" data-title="Computer Science Graduate / Fresher">🎓 Fresher / Graduate</button>
                   <button type="button" class="title-chip-btn" data-title="Accountant & Financial Executive">📑 Accountant / Tally</button>
-                  <button type="button" class="title-chip-btn" data-title="Office Assistant & Data Entry Operator">📊 Office / Excel Operator</button>
-                  <button type="button" class="title-chip-btn" data-title="Lead UI/UX & Product Designer">🎨 UI/UX Designer</button>
-                  <button type="button" class="title-chip-btn" data-title="Data Analyst & BI Specialist">📊 Data Analyst</button>
+                  <button type="button" class="title-chip-btn" data-title="Data Entry Operator & Office Assistant">📊 Office / Excel Operator</button>
+                  <button type="button" class="title-chip-btn" data-title="Lead UI/UX & Graphic Designer">🎨 UI/UX Designer</button>
+                  <button type="button" class="title-chip-btn" data-title="Data Analyst & BI Specialist">📈 Data Analyst</button>
                   <button type="button" class="title-chip-btn" data-title="Engineering Manager & Tech Lead">👔 Tech Lead / Manager</button>
                 </div>
 
                 <input type="text" id="w-input-headline" placeholder="e.g. Senior Software Engineer" class="form-input">
               </div>
 
-              <!-- Bio Options Picker Section -->
+              <!-- Bio Quick Chips -->
               <div class="form-group full-width">
                 <div class="picker-header">
-                  <label for="w-input-summary">Short Professional Bio / Summary (Optional)</label>
-                  <span class="picker-helper-hint">✨ Click a summary to auto-fill:</span>
-                </div>
-                
-                <!-- Quick Bio Option Buttons -->
-                <div class="chip-options-container">
-                  <button type="button" class="bio-chip-btn" data-bio-key="fresher">
-                    <span class="bio-chip-icon">🎓</span>
-                    <span>Fresher / Graduate</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="tech">
-                    <span class="bio-chip-icon">💻</span>
-                    <span>Software & Tech</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="executive">
-                    <span class="bio-chip-icon">👔</span>
-                    <span>Leadership / Exec</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="creative">
-                    <span class="bio-chip-icon">🎨</span>
-                    <span>Creative & UI/UX</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="results">
-                    <span class="bio-chip-icon">🚀</span>
-                    <span>Results-Driven</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="transition">
-                    <span class="bio-chip-icon">🔄</span>
-                    <span>Career Switcher</span>
-                  </button>
+                  <label for="w-input-summary">Short Professional Bio / Summary</label>
+                  <span class="picker-helper-hint">Tap to auto-fill:</span>
                 </div>
 
-                <textarea id="w-input-summary" rows="3" class="form-input form-textarea" placeholder="Pick an option above or type your customized summary..."></textarea>
+                <div class="chip-options-scroll">
+                  <button type="button" class="bio-chip-btn" data-bio-key="tech">💻 Tech Pro Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="fresher">🎓 Fresher Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="executive">👔 Executive Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="creative">🎨 Creative Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="results">⚡ Results Bio</button>
+                </div>
+
+                <textarea id="w-input-summary" rows="3" class="form-input form-textarea" placeholder="Brief summary of your professional background and top strengths..."></textarea>
               </div>
             </div>
           </div>
 
-          <!-- QUESTION 2: DATE OF BIRTH (DOB) -->
-          <div class="wizard-step-card" id="w-step-2">
+          <!-- QUESTION 2: DOB & CONTACT -->
+          <div class="wizard-step-card" data-step-index="2">
             <div class="wizard-question-box">
-              <div class="q-icon bg-indigo">🎂</div>
+              <div class="q-icon bg-emerald">🎂</div>
               <div>
-                <h3 class="q-title">What is your Date of Birth (DOB)?</h3>
-                <p class="q-desc">We automatically calculate your age. You can also add optional contact details or skip.</p>
+                <h3 class="q-title">Date of Birth & Contact Details</h3>
+                <p class="q-desc">Type your DOB in any format (e.g. 15/04/1997 or 15 April 1997).</p>
               </div>
             </div>
+
             <div class="form-grid">
               <div class="form-group full-width">
                 <label for="w-input-dob">
-                  Date of Birth (DOB)
+                  Date of Birth (DOB) — Type directly
                   <span id="w-age-badge" class="badge badge-subtle hidden">Age: --</span>
                 </label>
                 <input type="text" id="w-input-dob" placeholder="e.g. 15/04/1997 or 15 April 1997" class="form-input" autocomplete="bday">
               </div>
+
               <div class="form-group">
-                <label for="w-input-location">Location / City (Optional)</label>
+                <label for="w-input-location">City / Location</label>
                 <input type="text" id="w-input-location" placeholder="e.g. Kanpur" class="form-input">
               </div>
+
               <div class="form-group">
-                <label for="w-input-email">Email Address (Optional)</label>
-                <input type="email" id="w-input-email" placeholder="e.g. ramu@example.com" class="form-input">
+                <label for="w-input-email">Email Address</label>
+                <input type="email" id="w-input-email" placeholder="e.g. ramu@email.com" class="form-input" inputmode="email">
               </div>
+
               <div class="form-group full-width">
-                <label for="w-input-phone">Phone Number (Optional)</label>
+                <label for="w-input-phone">Phone / WhatsApp Number</label>
                 <input type="tel" id="w-input-phone" placeholder="e.g. +91 98765 43210" class="form-input" inputmode="tel">
               </div>
             </div>
           </div>
 
-          <!-- QUESTION 3: QUALIFICATIONS & EDUCATION -->
-          <div class="wizard-step-card" id="w-step-3">
+          <!-- QUESTION 3: QUALIFICATIONS -->
+          <div class="wizard-step-card" data-step-index="3">
             <div class="wizard-question-box">
-              <div class="q-icon bg-emerald">🎓</div>
+              <div class="q-icon bg-violet">🎓</div>
               <div>
                 <h3 class="q-title">What are your Qualifications & Education?</h3>
-                <p class="q-desc">Add your degree, university, graduation year, and score/GPA. If none, click Skip.</p>
+                <p class="q-desc">Add your degree, college/school, year, and score. Or skip if not applicable.</p>
               </div>
             </div>
-            <div id="w-qualifications-list" class="dynamic-list">
-              <!-- Rendered via JS -->
-            </div>
+
+            <div id="w-qualifications-list" class="dynamic-list"></div>
+
             <button type="button" id="btn-w-add-qualification" class="btn btn-outline full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-              <span>+ Add Qualification</span>
+              <span>+ Add Qualification / Degree</span>
             </button>
           </div>
 
-          <!-- QUESTION 4: SKILLS & COMPETENCIES (With Basic & Role Skills) -->
-          <div class="wizard-step-card" id="w-step-4">
+          <!-- QUESTION 4: SKILLS -->
+          <div class="wizard-step-card" data-step-index="4">
             <div class="wizard-question-box">
-              <div class="q-icon bg-violet">⚡</div>
+              <div class="q-icon bg-amber">⚡</div>
               <div>
-                <h3 class="q-title">What are your Key Skills & Competencies?</h3>
-                <p class="q-desc">Click any of the basic office tools or specialized skills below to add them. None are selected by default.</p>
+                <h3 class="q-title">What are your Key Skills?</h3>
+                <p class="q-desc">Tap any basic office skill or role suggestions below to add them instantly.</p>
               </div>
             </div>
 
-            <!-- Basic & Office Skills (Always Prominent) -->
+            <!-- Basic Office Skills Section -->
             <div class="skill-category-box">
-              <span class="skill-category-label">💼 Basic Office & Productivity Skills (Click to Add):</span>
-              <div class="quick-chips" id="w-basic-chips-container">
-                <!-- Rendered via JS: Excel, Tally, Word, PowerPoint, etc. -->
+              <div class="skill-category-label">
+                <span>📁 Basic Office & Computer Skills:</span>
               </div>
+              <div class="quick-chips" id="w-basic-chips-container"></div>
             </div>
 
-            <!-- Role-Specific Skill Suggestions -->
+            <!-- Role-Specific Suggestions -->
             <div class="skill-category-box">
-              <span class="skill-category-label">🎯 Role & Technical Suggestions (Click to Add):</span>
-              <div class="quick-chips" id="w-quick-chips-container">
-                <!-- Rendered via JS based on selected resume type -->
+              <div class="skill-category-label">
+                <span>💡 Suggested Role Skills:</span>
+              </div>
+              <div class="quick-chips" id="w-quick-chips-container"></div>
+            </div>
+
+            <!-- Custom Skill Input Row -->
+            <div class="form-group full-width" style="margin-top: 10px;">
+              <label for="w-input-skill">Or Type a Custom Skill</label>
+              <div class="skill-input-row">
+                <input type="text" id="w-input-skill" placeholder="e.g. Photoshop, SEO, Python..." class="form-input">
+                <select id="w-select-skill-level" class="form-input form-select">
+                  <option value="Expert">Expert</option>
+                  <option value="Advanced" selected>Advanced</option>
+                  <option value="Proficient">Proficient</option>
+                  <option value="Familiar">Familiar</option>
+                </select>
+                <button type="button" id="btn-w-add-skill" class="btn btn-secondary">Add</button>
               </div>
             </div>
 
-            <!-- Custom Skill Manual Input -->
-            <div class="skill-input-row" style="margin-top: 10px;">
-              <input type="text" id="w-input-skill" placeholder="Or type a custom skill & press Enter" class="form-input">
-              <select id="w-select-skill-level" class="form-select">
-                <option value="Advanced">Advanced</option>
-                <option value="Proficient" selected>Proficient</option>
-                <option value="Expert">Expert</option>
-                <option value="Familiar">Familiar</option>
-              </select>
-              <button type="button" id="btn-w-add-skill" class="btn btn-secondary">Add</button>
-            </div>
-
-            <!-- Active Selected Chips -->
+            <!-- Selected Skills Chips -->
             <div class="selected-skills-header">
               <span class="selected-skills-title">Your Selected Skills:</span>
-              <span class="selected-skills-count" id="w-skills-count">0 skills selected</span>
+              <span class="selected-skills-count" id="w-skills-count">0 skills</span>
             </div>
-            <div id="w-skills-container" class="skills-chips-wrapper">
-              <!-- Rendered via JS -->
-            </div>
+            <div id="w-skills-container" class="skills-chips-wrapper"></div>
           </div>
 
-          <!-- QUESTION 5: WORK EXPERIENCE / PROJECTS -->
-          <div class="wizard-step-card" id="w-step-5">
+          <!-- QUESTION 5: EXPERIENCE -->
+          <div class="wizard-step-card" data-step-index="5">
             <div class="wizard-question-box">
-              <div class="q-icon bg-amber">💼</div>
+              <div class="q-icon bg-rose">💼</div>
               <div>
                 <h3 class="q-title">What is your Work Experience or Projects?</h3>
-                <p class="q-desc">Add roles, internships, or key projects. If you are a fresher with no experience, click Skip.</p>
+                <p class="q-desc">Add previous jobs, internships, or key projects. Or skip if fresher.</p>
               </div>
             </div>
-            <div id="w-experience-list" class="dynamic-list">
-              <!-- Rendered via JS -->
-            </div>
+
+            <div id="w-experience-list" class="dynamic-list"></div>
+
             <button type="button" id="btn-w-add-experience" class="btn btn-outline full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
               <span>+ Add Experience / Project</span>
             </button>
           </div>
         </div>
 
-        <!-- Wizard Navigation Action Bar -->
+        <!-- Wizard Navigation Footer -->
         <div class="wizard-nav-footer">
-          <button type="button" class="btn btn-secondary" id="btn-w-prev">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-            <span>Previous</span>
+          <button type="button" id="btn-w-prev" class="btn btn-secondary" style="visibility: hidden;">
+            ← Back
           </button>
-
           <div class="wizard-right-actions">
-            <button type="button" class="btn btn-ghost" id="btn-w-skip" title="Skip this question and leave detail empty">
-              <span>Skip this question</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="13 17 18 12 13 7"/>
-                <polyline points="6 17 11 12 6 7"/>
-              </svg>
+            <button type="button" id="btn-w-skip" class="btn btn-ghost">
+              Skip
             </button>
-
-            <button type="button" class="btn btn-primary" id="btn-w-next">
+            <button type="button" id="btn-w-next" class="btn btn-primary">
               <span id="w-next-btn-text">Next Question →</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- VIEW 3: FULL FORM EDITOR TAB -->
+      <!-- VIEW 2: ALL DETAILS (FULL EDITOR) -->
       <div class="view-panel" id="view-content">
-        <div class="panel-intro" style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <h2>All Resume Details</h2>
-            <p>Review or edit all fields in one single view.</p>
-          </div>
-          <button type="button" class="btn btn-secondary" id="btn-switch-to-wizard" style="font-size: 0.75rem;">
-            <span>⚡ Open Question Wizard</span>
-          </button>
-        </div>
-
         <div class="editor-scroll">
-          <!-- Step 1: Personal Details (Name, DOB) -->
+          <!-- Section: Personal Info -->
           <div class="card-section">
             <div class="section-header">
-              <div class="section-icon bg-indigo">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
+              <div class="section-icon bg-indigo">👤</div>
               <div>
-                <h2>Personal Information</h2>
-                <p>Your full identity and key profile details</p>
+                <h2>Personal Details</h2>
+                <p>Name, headline, contact, and bio summary</p>
               </div>
             </div>
 
@@ -562,26 +370,22 @@
                 <input type="text" id="input-name" placeholder="e.g. Ramu" class="form-input" autocomplete="name">
               </div>
 
-              <!-- Full Editor Headline with Options -->
               <div class="form-group full-width">
                 <div class="picker-header">
-                  <label for="input-headline">Professional Title / Headline</label>
-                  <span class="picker-helper-hint">✨ Click a title to auto-fill:</span>
+                  <label for="input-headline">Professional Headline / Title</label>
+                  <span class="picker-helper-hint">Tap to auto-fill:</span>
                 </div>
-
-                <div class="chip-options-container">
-                  <button type="button" class="title-chip-btn" data-title="Senior Full-Stack Engineer">💻 Full-Stack Engineer</button>
+                <div class="chip-options-scroll">
+                  <button type="button" class="title-chip-btn" data-title="Full-Stack Software Engineer">💻 Full-Stack Engineer</button>
                   <button type="button" class="title-chip-btn" data-title="Frontend React Developer">⚛️ React Developer</button>
-                  <button type="button" class="title-chip-btn" data-title="Backend & Python Developer">🐍 Backend Engineer</button>
-                  <button type="button" class="title-chip-btn" data-title="Entry-Level Software Engineer / Graduate">🎓 Graduate / Fresher</button>
+                  <button type="button" class="title-chip-btn" data-title="Backend & Python Engineer">🐍 Python Developer</button>
+                  <button type="button" class="title-chip-btn" data-title="Computer Science Graduate / Fresher">🎓 Graduate / Fresher</button>
                   <button type="button" class="title-chip-btn" data-title="Accountant & Financial Executive">📑 Accountant / Tally</button>
-                  <button type="button" class="title-chip-btn" data-title="Office Assistant & Data Entry Operator">📊 Office / Excel Operator</button>
-                  <button type="button" class="title-chip-btn" data-title="Lead UI/UX & Product Designer">🎨 UI/UX Designer</button>
-                  <button type="button" class="title-chip-btn" data-title="Data Analyst & BI Specialist">📊 Data Analyst</button>
-                  <button type="button" class="title-chip-btn" data-title="Engineering Manager & Tech Lead">👔 Tech Lead / Manager</button>
+                  <button type="button" class="title-chip-btn" data-title="Data Entry Operator & Office Assistant">📊 Office / Excel Operator</button>
+                  <button type="button" class="title-chip-btn" data-title="Lead UI/UX & Graphic Designer">🎨 UI/UX Designer</button>
+                  <button type="button" class="title-chip-btn" data-title="Data Analyst & BI Specialist">📈 Data Analyst</button>
                 </div>
-
-                <input type="text" id="input-headline" placeholder="e.g. Senior Full-Stack Engineer & Architect" class="form-input">
+                <input type="text" id="input-headline" placeholder="e.g. Senior Full-Stack Engineer" class="form-input">
               </div>
 
               <div class="form-group">
@@ -599,7 +403,7 @@
 
               <div class="form-group">
                 <label for="input-email">Email Address</label>
-                <input type="email" id="input-email" placeholder="e.g. ramu@email.com" class="form-input">
+                <input type="email" id="input-email" placeholder="e.g. ramu@email.com" class="form-input" inputmode="email">
               </div>
 
               <div class="form-group">
@@ -607,225 +411,205 @@
                 <input type="tel" id="input-phone" placeholder="e.g. +91 98765 43210" class="form-input" inputmode="tel">
               </div>
 
-              <!-- Full Editor Bio Options -->
               <div class="form-group full-width">
                 <div class="picker-header">
                   <label for="input-summary">Professional Bio / Summary</label>
-                  <span class="picker-helper-hint">✨ Click a summary to auto-fill:</span>
+                  <span class="picker-helper-hint">Tap to auto-fill:</span>
                 </div>
-
-                <div class="chip-options-container">
-                  <button type="button" class="bio-chip-btn" data-bio-key="fresher">
-                    <span class="bio-chip-icon">🎓</span>
-                    <span>Fresher / Graduate</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="tech">
-                    <span class="bio-chip-icon">💻</span>
-                    <span>Software & Tech</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="executive">
-                    <span class="bio-chip-icon">👔</span>
-                    <span>Leadership / Exec</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="creative">
-                    <span class="bio-chip-icon">🎨</span>
-                    <span>Creative & UI/UX</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="results">
-                    <span class="bio-chip-icon">🚀</span>
-                    <span>Results-Driven</span>
-                  </button>
-                  <button type="button" class="bio-chip-btn" data-bio-key="transition">
-                    <span class="bio-chip-icon">🔄</span>
-                    <span>Career Switcher</span>
-                  </button>
+                <div class="chip-options-scroll">
+                  <button type="button" class="bio-chip-btn" data-bio-key="tech">💻 Tech Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="fresher">🎓 Fresher Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="executive">👔 Executive Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="creative">🎨 Creative Bio</button>
+                  <button type="button" class="bio-chip-btn" data-bio-key="results">⚡ Results Bio</button>
                 </div>
-
-                <textarea id="input-summary" rows="3" class="form-input form-textarea" placeholder="Pick an option above or type a customized bio..."></textarea>
+                <textarea id="input-summary" rows="3" class="form-input form-textarea" placeholder="Brief summary of your background..."></textarea>
               </div>
             </div>
           </div>
 
-          <!-- Step 2: Qualifications (Education) -->
+          <!-- Section: Qualifications -->
           <div class="card-section">
             <div class="section-header">
-              <div class="section-icon bg-emerald">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                </svg>
-              </div>
+              <div class="section-icon bg-violet">🎓</div>
               <div>
                 <h2>Qualifications & Education</h2>
-                <p>Degrees, certifications, academic institutions and grades</p>
+                <p>Degrees, colleges, years, and grades</p>
               </div>
             </div>
-
-            <div id="qualifications-list" class="dynamic-list">
-              <!-- Dynamic Qualification Items rendered via JS -->
-            </div>
-
+            <div id="qualifications-list" class="dynamic-list"></div>
             <button type="button" id="btn-add-qualification" class="btn btn-outline full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              <span>Add Qualification</span>
+              + Add Qualification
             </button>
           </div>
 
-          <!-- Step 3: Skills (With Basic Office & Role Suggestions) -->
+          <!-- Section: Skills -->
           <div class="card-section">
             <div class="section-header">
-              <div class="section-icon bg-violet">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-              </div>
+              <div class="section-icon bg-amber">⚡</div>
               <div>
                 <h2>Skills & Competencies</h2>
-                <p>Pick basic office tools (Excel, Tally, Word) or specialized skills</p>
+                <p>Tap basic office skills or role suggestions</p>
               </div>
             </div>
 
-            <!-- Basic Office Skills Category -->
             <div class="skill-category-box">
-              <span class="skill-category-label">💼 Basic Office & Software Skills (Click to Add):</span>
-              <div class="quick-chips" id="basic-chips-container">
-                <!-- Rendered via JS -->
-              </div>
+              <div class="skill-category-label">📁 Basic Office & Computer Skills:</div>
+              <div class="quick-chips" id="basic-chips-container"></div>
             </div>
 
-            <!-- Role-Specific Suggestion Category -->
             <div class="skill-category-box">
-              <span class="skill-category-label">🎯 Role & Technical Suggestions (Click to Add):</span>
-              <div class="quick-chips" id="quick-chips-container">
-                <!-- Rendered via JS -->
+              <div class="skill-category-label">💡 Role Suggestions:</div>
+              <div class="quick-chips" id="quick-chips-container"></div>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 10px;">
+              <label for="input-skill">Custom Skill</label>
+              <div class="skill-input-row">
+                <input type="text" id="input-skill" placeholder="e.g. MS Excel, SQL, React..." class="form-input">
+                <select id="select-skill-level" class="form-input form-select">
+                  <option value="Expert">Expert</option>
+                  <option value="Advanced" selected>Advanced</option>
+                  <option value="Proficient">Proficient</option>
+                  <option value="Familiar">Familiar</option>
+                </select>
+                <button type="button" id="btn-add-skill" class="btn btn-secondary">Add</button>
               </div>
             </div>
 
-            <!-- Add Custom Skill Input -->
-            <div class="skill-input-row" style="margin-top: 10px;">
-              <input type="text" id="input-skill" placeholder="Or type a custom skill & press Enter" class="form-input">
-              <select id="select-skill-level" class="form-select">
-                <option value="Advanced">Advanced</option>
-                <option value="Proficient" selected>Proficient</option>
-                <option value="Expert">Expert</option>
-                <option value="Familiar">Familiar</option>
-              </select>
-              <button type="button" id="btn-add-skill" class="btn btn-secondary">Add</button>
-            </div>
-
-            <!-- Active Skills Chips List -->
             <div class="selected-skills-header">
-              <span class="selected-skills-title">Your Active Skills:</span>
+              <span class="selected-skills-title">Your Skills:</span>
               <span class="selected-skills-count" id="skills-count">0 skills</span>
             </div>
-            <div id="skills-container" class="skills-chips-wrapper">
-              <!-- Rendered via JS -->
-            </div>
+            <div id="skills-container" class="skills-chips-wrapper"></div>
           </div>
 
-          <!-- Step 4: Work Experience -->
+          <!-- Section: Experience -->
           <div class="card-section">
             <div class="section-header">
-              <div class="section-icon bg-amber">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                </svg>
-              </div>
+              <div class="section-icon bg-rose">💼</div>
               <div>
-                <h2>Work Experience</h2>
-                <p>Past roles, organizations, key achievements and impact</p>
+                <h2>Work Experience & Projects</h2>
+                <p>Employment history, roles, and descriptions</p>
               </div>
             </div>
-
-            <div id="experience-list" class="dynamic-list">
-              <!-- Dynamic Experience Items rendered via JS -->
-            </div>
-
+            <div id="experience-list" class="dynamic-list"></div>
             <button type="button" id="btn-add-experience" class="btn btn-outline full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              <span>Add Experience</span>
+              + Add Experience / Project
             </button>
           </div>
         </div>
       </div>
 
-      <!-- VIEW 4: THEME & STYLE TAB -->
+      <!-- VIEW 3: TEMPLATES & STYLE CUSTOMIZER -->
       <div class="view-panel" id="view-style">
         <div class="panel-intro">
-          <h2>Theme & Visual Customizer</h2>
-          <p>Fine-tune colors, fonts, and dynamic A4 page-filling behavior.</p>
+          <h2>Resume Templates & Styling</h2>
+          <p>Pick a pre-tuned archetype, accent color, and typography</p>
+        </div>
+
+        <!-- 6 Resume Type Cards -->
+        <div class="resume-types-grid">
+          <div class="type-card selected" data-type="tech">
+            <div class="type-card-header">
+              <div class="type-icon bg-indigo">💻</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">Tech & Software</h3>
+            <p class="type-desc">Engineers & Developers</p>
+          </div>
+
+          <div class="type-card" data-type="fresher">
+            <div class="type-card-header">
+              <div class="type-icon bg-emerald">🎓</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">Fresher / Graduate</h3>
+            <p class="type-desc">Entry-Level & College</p>
+          </div>
+
+          <div class="type-card" data-type="executive">
+            <div class="type-card-header">
+              <div class="type-icon bg-slate">👔</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">Executive & Lead</h3>
+            <p class="type-desc">Managers & Leadership</p>
+          </div>
+
+          <div class="type-card" data-type="ats">
+            <div class="type-card-header">
+              <div class="type-icon bg-slate">📄</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">ATS Clean Scan</h3>
+            <p class="type-desc">High-Parse Rating</p>
+          </div>
+
+          <div class="type-card" data-type="creative">
+            <div class="type-card-header">
+              <div class="type-icon bg-violet">🎨</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">Creative & Designer</h3>
+            <p class="type-desc">Sidebar Graphic Layout</p>
+          </div>
+
+          <div class="type-card" data-type="academic">
+            <div class="type-card-header">
+              <div class="type-icon bg-rose">🔬</div>
+              <span class="type-check-badge">✓</span>
+            </div>
+            <h3 class="type-title">Academic & Research</h3>
+            <p class="type-desc">Scholarly & Scientific</p>
+          </div>
         </div>
 
         <div class="style-config-container">
-          <!-- Page Spacing Density -->
-          <div class="card-section">
-            <h3 class="config-title">A4 Page Auto-Fill & Density</h3>
-            <p class="config-subtitle">Automatically calculates sizing & gaps to fill 1 full A4 page perfectly.</p>
-            <div class="density-pills" id="density-pills-style-tab">
-              <button class="density-pill active" data-density="auto">✨ Auto-Fill A4 (Smart)</button>
-              <button class="density-pill" data-density="spacious">Spacious (Expanded)</button>
-              <button class="density-pill" data-density="balanced">Balanced</button>
-              <button class="density-pill" data-density="compact">Compact</button>
+          <!-- A4 Page Fill Density -->
+          <div>
+            <h3 class="config-title">A4 Page Fill & Density</h3>
+            <p class="config-subtitle">Automatically scales spacing and glorified lines to fill the standard A4 page</p>
+            <div class="density-pills">
+              <button type="button" class="density-pill active" data-density="auto">✨ Auto-Fill A4</button>
+              <button type="button" class="density-pill" data-density="spacious">Spacious</button>
+              <button type="button" class="density-pill" data-density="balanced">Balanced</button>
+              <button type="button" class="density-pill" data-density="compact">Compact</button>
             </div>
           </div>
 
           <!-- Color Palette -->
-          <div class="card-section">
-            <h3 class="config-title">Accent Color Palette</h3>
-            <p class="config-subtitle">Changes the highlight colors of headers, badges, and accents.</p>
-            <div class="color-palette-large" id="color-palette-style-tab">
-              <button class="color-dot-large active" data-color="#2563eb" style="--dot-color: #2563eb;">
-                <span>Royal Blue</span>
-              </button>
-              <button class="color-dot-large" data-color="#059669" style="--dot-color: #059669;">
-                <span>Emerald</span>
-              </button>
-              <button class="color-dot-large" data-color="#7c3aed" style="--dot-color: #7c3aed;">
-                <span>Purple</span>
-              </button>
-              <button class="color-dot-large" data-color="#e11d48" style="--dot-color: #e11d48;">
-                <span>Rose</span>
-              </button>
-              <button class="color-dot-large" data-color="#d97706" style="--dot-color: #d97706;">
-                <span>Amber</span>
-              </button>
-              <button class="color-dot-large" data-color="#0f172a" style="--dot-color: #0f172a;">
-                <span>Slate</span>
-              </button>
+          <div>
+            <h3 class="config-title">Accent Color</h3>
+            <div class="color-palette-large">
+              <button type="button" class="color-dot-large active" data-color="#2563eb" style="--dot-color: #2563eb;">Electric Blue</button>
+              <button type="button" class="color-dot-large" data-color="#059669" style="--dot-color: #059669;">Emerald</button>
+              <button type="button" class="color-dot-large" data-color="#7c3aed" style="--dot-color: #7c3aed;">Royal Violet</button>
+              <button type="button" class="color-dot-large" data-color="#0f172a" style="--dot-color: #0f172a;">Executive Slate</button>
+              <button type="button" class="color-dot-large" data-color="#d97706" style="--dot-color: #d97706;">Warm Amber</button>
+              <button type="button" class="color-dot-large" data-color="#e11d48" style="--dot-color: #e11d48;">Crimson Rose</button>
             </div>
           </div>
 
-          <!-- Typography -->
-          <div class="card-section">
-            <h3 class="config-title">Resume Typography</h3>
-            <p class="config-subtitle">Select font family optimized for reading and printing.</p>
-            <div class="font-options-grid" id="font-options-grid">
-              <button class="font-option-btn active" data-font="'Plus Jakarta Sans', sans-serif" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+          <!-- Font Typography -->
+          <div>
+            <h3 class="config-title">Typography & Font</h3>
+            <div class="font-options-grid">
+              <button type="button" class="font-option-btn active" data-font="'Plus Jakarta Sans', sans-serif">
                 <strong>Plus Jakarta Sans</strong>
-                <span>Modern, Clean, Tech</span>
+                <span>Modern, Clean, Corporate</span>
               </button>
-              <button class="font-option-btn" data-font="'Inter', sans-serif" style="font-family: 'Inter', sans-serif;">
-                <strong>Inter</strong>
-                <span>Neutral & Ultra Readable</span>
-              </button>
-              <button class="font-option-btn" data-font="'Outfit', sans-serif" style="font-family: 'Outfit', sans-serif;">
+              <button type="button" class="font-option-btn" data-font="'Outfit', sans-serif">
                 <strong>Outfit</strong>
-                <span>Geometric & Premium</span>
+                <span>Contemporary, Friendly</span>
               </button>
-              <button class="font-option-btn" data-font="'Playfair Display', serif" style="font-family: 'Playfair Display', serif;">
+              <button type="button" class="font-option-btn" data-font="'Inter', sans-serif">
+                <strong>Inter</strong>
+                <span>Crisp, Technical, ATS-Optimized</span>
+              </button>
+              <button type="button" class="font-option-btn" data-font="'Playfair Display', serif">
                 <strong>Playfair Display</strong>
-                <span>Editorial & Academic Serif</span>
-              </button>
-              <button class="font-option-btn" data-font="'JetBrains Mono', monospace" style="font-family: 'JetBrains Mono', monospace;">
-                <strong>JetBrains Mono</strong>
-                <span>Technical & Developer</span>
+                <span>Editorial, Elegant & Scholarly</span>
               </button>
             </div>
           </div>
@@ -833,87 +617,62 @@
       </div>
     </section>
 
-    <!-- Right Column: Live Resume Canvas & Quick Toolbar -->
+    <!-- Right Column: Live A4 Resume Preview Canvas -->
     <section class="preview-pane" id="preview-pane">
-      <!-- Toolbar Controls -->
       <div class="preview-toolbar">
         <div class="toolbar-group">
-          <label class="toolbar-label">A4 Fill:</label>
-          <div class="density-pills" id="density-pills">
-            <button class="density-pill active" data-density="auto" title="Automatically dynamically scales content to fill full A4 sheet">✨ Auto-Fill A4</button>
-            <button class="density-pill" data-density="spacious" title="Large text & expanded spacing">Spacious</button>
-            <button class="density-pill" data-density="balanced" title="Standard balanced spacing">Balanced</button>
-            <button class="density-pill" data-density="compact" title="Compact spacing for heavy content">Compact</button>
-          </div>
-        </div>
-
-        <div class="toolbar-divider"></div>
-
-        <div class="toolbar-group">
-          <label class="toolbar-label">Color:</label>
-          <div class="color-palette" id="color-palette">
-            <button class="color-dot active" data-color="#2563eb" style="--dot-color: #2563eb;" title="Royal Blue"></button>
-            <button class="color-dot" data-color="#059669" style="--dot-color: #059669;" title="Emerald Green"></button>
-            <button class="color-dot" data-color="#7c3aed" style="--dot-color: #7c3aed;" title="Electric Purple"></button>
-            <button class="color-dot" data-color="#e11d48" style="--dot-color: #e11d48;" title="Crimson Rose"></button>
+          <span class="toolbar-label">Palette:</span>
+          <div class="color-palette">
+            <button class="color-dot active" data-color="#2563eb" style="--dot-color: #2563eb;" title="Electric Blue"></button>
+            <button class="color-dot" data-color="#059669" style="--dot-color: #059669;" title="Emerald"></button>
+            <button class="color-dot" data-color="#7c3aed" style="--dot-color: #7c3aed;" title="Royal Violet"></button>
+            <button class="color-dot" data-color="#0f172a" style="--dot-color: #0f172a;" title="Executive Slate"></button>
             <button class="color-dot" data-color="#d97706" style="--dot-color: #d97706;" title="Warm Amber"></button>
-            <button class="color-dot" data-color="#0f172a" style="--dot-color: #0f172a;" title="Slate Black"></button>
+            <button class="color-dot" data-color="#e11d48" style="--dot-color: #e11d48;" title="Crimson Rose"></button>
           </div>
         </div>
 
         <div class="toolbar-divider"></div>
 
         <div class="toolbar-group">
-          <label for="font-select" class="toolbar-label">Font:</label>
-          <select id="font-select" class="form-select toolbar-select">
-            <option value="'Plus Jakarta Sans', sans-serif">Jakarta Sans</option>
-            <option value="'Inter', sans-serif">Inter</option>
+          <span class="toolbar-label">Font:</span>
+          <select id="font-select" class="form-input form-select toolbar-select">
+            <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
             <option value="'Outfit', sans-serif">Outfit</option>
-            <option value="'Playfair Display', serif">Playfair Serif</option>
-            <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Playfair Display', serif">Playfair Display</option>
           </select>
         </div>
       </div>
 
-      <!-- Resume Page Container (Strict A4 Paper Dimensions: 210mm x 297mm) -->
-      <div class="resume-sheet-wrapper">
+      <!-- Scrollable Preview Area -->
+      <div class="resume-sheet-wrapper" id="resume-sheet-wrapper">
         <div class="a4-sheet-container" id="a4-sheet-container">
-          <div id="resume-canvas" class="resume-sheet template-modern fill-scale-auto" style="--accent-color: #2563eb; font-family: 'Plus Jakarta Sans', sans-serif;">
-            <!-- Dynamically Rendered Resume Content in app.js -->
+          <div id="resume-canvas" class="resume-sheet template-modern scale-balanced">
+            <!-- Dynamic A4 Resume Injected Here by JS -->
           </div>
         </div>
+      </div>
+
+      <!-- Mobile Sticky Download PDF Bar (Visible in Preview Mode on Mobile) -->
+      <div class="mobile-preview-action-bar">
+        <button type="button" id="btn-mobile-preview-edit" class="btn btn-secondary btn-large">
+          ✏️ Back to Edit
+        </button>
+        <button type="button" id="btn-mobile-preview-download" class="btn btn-primary btn-large">
+          📥 Download A4 PDF
+        </button>
       </div>
     </section>
   </main>
 
-  <!-- Mobile Floating Preview Action Button (FAB) -->
-  <button type="button" class="mobile-preview-fab" id="mobile-preview-fab" title="View Live A4 Resume Preview">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-      <circle cx="12" cy="12" r="3"/>
-    </svg>
-    <span class="fab-text">Live Preview</span>
-  </button>
-
-  <!-- Android & Mobile App Bottom Navigation Bar -->
+  <!-- Mobile Bottom Navigation Bar (Single, Clean, Rock-Solid) -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
     <button type="button" class="mobile-nav-item active" data-target-view="wizard">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-        <line x1="12" y1="17" x2="12.01" y2="17"/>
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
       </svg>
       <span>Questions</span>
-    </button>
-
-    <button type="button" class="mobile-nav-item" data-target-view="types">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="7" height="7" rx="1"/>
-        <rect x="3" y="14" width="7" height="7" rx="1"/>
-      </svg>
-      <span>Types</span>
     </button>
 
     <button type="button" class="mobile-nav-item" data-target-view="content">
@@ -921,30 +680,33 @@
         <path d="M12 20h9"/>
         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
       </svg>
-      <span>All Form</span>
+      <span>Edit All</span>
     </button>
 
     <button type="button" class="mobile-nav-item" data-target-view="style">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
+        <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+        <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+        <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+        <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
         <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
       </svg>
-      <span>Theme</span>
+      <span>Themes</span>
     </button>
 
-    <button type="button" class="mobile-nav-item highlight" id="btn-mobile-pdf">
+    <button type="button" class="mobile-nav-item highlight" id="btn-mobile-nav-preview">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="6 9 6 2 18 2 18 9"/>
-        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-        <rect x="6" y="14" width="12" height="8"/>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
       </svg>
-      <span>A4 PDF</span>
+      <span>A4 Preview</span>
     </button>
   </nav>
 
   <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container"></div>
+  <div class="toast-container" id="toast-container"></div>
 
+  <!-- JavaScript -->
   <script src="app.js"></script>
 </body>
 </html>
