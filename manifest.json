@@ -1,0 +1,20 @@
+{
+  "name": "QUICKNIKH RESUME — Instant Pro Resume Builder",
+  "short_name": "QuickNikh",
+  "description": "Create sleek, professional, ATS-friendly A4 resumes instantly on Android and Desktop.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f19",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "assets/panda-logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities", "business"]
+}

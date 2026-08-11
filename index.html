@@ -2,25 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>QUICKNIKH RESUME — Instant Pro Resume Builder</title>
-  <meta name="description" content="Generate sleek, professional, ATS-friendly resumes instantly with Name, Qualifications, Skills, Experience, and DOB.">
+  <meta name="description" content="Generate sleek, professional, ATS-friendly resumes instantly with Name, Qualifications, Skills, Experience, and DOB. Optimized for Android and Desktop.">
+  
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="QuickNikh">
+  <link rel="apple-touch-icon" href="assets/panda-logo.svg">
   <link rel="icon" type="image/svg+xml" href="assets/panda-logo.svg">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="mode-auto">
+  <!-- PWA Install Prompt Banner (Android & Mobile) -->
+  <div id="pwa-install-banner" class="pwa-install-banner hidden">
+    <div class="pwa-banner-left">
+      <img src="assets/panda-logo.svg" alt="Panda App Icon" class="pwa-banner-icon">
+      <div>
+        <strong>Install QUICKNIKH App</strong>
+        <span>1-Tap home screen access & offline resume editing</span>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button type="button" id="btn-install-pwa" class="btn btn-primary btn-sm">📲 Install App</button>
+      <button type="button" id="btn-dismiss-pwa" class="btn-close-banner" aria-label="Dismiss">✕</button>
+    </div>
+  </div>
+
   <!-- Header Bar -->
   <header class="app-header">
     <div class="header-brand">
-      <div class="brand-logo panda-mascot-logo">
+      <div class="brand-logo panda-mascot-logo" title="QUICKNIKH RESUME Mascot">
         <img src="assets/panda-logo.svg" alt="Panda with Straw Hat Logo" class="panda-logo-img">
       </div>
       <div>
         <h1 class="brand-title">QUICKNIKH <span>RESUME</span></h1>
         <p class="brand-subtitle">Effortless, dynamic & professional resume maker</p>
+      </div>
+    </div>
+
+    <!-- Desktop vs Android View Mode Toggle Switcher -->
+    <div class="view-mode-switcher-container">
+      <div class="mode-switch-pills" id="mode-switch-pills">
+        <button type="button" class="mode-pill active" data-mode="auto" title="Auto-detect based on screen size">
+          <span>🔄 Auto</span>
+        </button>
+        <button type="button" class="mode-pill" data-mode="desktop" title="Force full desktop split view">
+          <span>💻 Desktop</span>
+        </button>
+        <button type="button" class="mode-pill" data-mode="android" title="Switch to touch-optimized mobile app view">
+          <span>📱 Android</span>
+        </button>
       </div>
     </div>
 
@@ -30,7 +71,7 @@
           <path d="m18 15-6-6-6 6"/>
           <path d="M12 3v14"/>
         </svg>
-        <span>Sample Data</span>
+        <span class="btn-text">Sample Data</span>
       </button>
 
       <button id="btn-clear" class="btn btn-ghost" title="Reset all fields">
@@ -39,7 +80,7 @@
           <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
           <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
         </svg>
-        <span>Clear</span>
+        <span class="btn-text">Clear</span>
       </button>
 
       <button id="btn-print" class="btn btn-primary" title="Print or Save as standard A4 PDF">
@@ -54,13 +95,13 @@
   </header>
 
   <!-- Main Container -->
-  <main class="app-layout">
+  <main class="app-layout" id="app-layout">
     <!-- Left Column: Form Editor & Tabbed Navigation -->
     <section class="editor-pane" id="editor-pane">
       <!-- Mobile View Toggle (Editor vs Preview) -->
-      <div class="editor-tabs-mobile">
-        <button class="tab-btn active" id="tab-editor-btn">Editor</button>
-        <button class="tab-btn" id="tab-preview-btn">Live Preview</button>
+      <div class="editor-tabs-mobile" id="editor-tabs-mobile">
+        <button class="tab-btn active" id="tab-editor-btn">✏️ Form Editor</button>
+        <button class="tab-btn" id="tab-preview-btn">👁️ Live A4 Preview</button>
       </div>
 
       <!-- Main Navigation Tabs in Editor -->
@@ -273,7 +314,7 @@
             <div class="form-grid">
               <div class="form-group full-width">
                 <label for="w-input-name">Full Name</label>
-                <input type="text" id="w-input-name" placeholder="e.g. Alex Morgan" class="form-input" autocomplete="name">
+                <input type="text" id="w-input-name" placeholder="e.g. Ramu" class="form-input" autocomplete="name">
               </div>
 
               <!-- Professional Title / Headline with Options -->
@@ -354,19 +395,19 @@
                   Date of Birth (DOB)
                   <span id="w-age-badge" class="badge badge-subtle hidden">Age: --</span>
                 </label>
-                <input type="date" id="w-input-dob" class="form-input">
+                <input type="text" id="w-input-dob" placeholder="e.g. 15/04/1997 or 15 April 1997" class="form-input" autocomplete="bday">
               </div>
               <div class="form-group">
                 <label for="w-input-location">Location / City (Optional)</label>
-                <input type="text" id="w-input-location" placeholder="e.g. San Francisco, CA" class="form-input">
+                <input type="text" id="w-input-location" placeholder="e.g. Kanpur" class="form-input">
               </div>
               <div class="form-group">
                 <label for="w-input-email">Email Address (Optional)</label>
-                <input type="email" id="w-input-email" placeholder="e.g. alex@example.com" class="form-input">
+                <input type="email" id="w-input-email" placeholder="e.g. ramu@example.com" class="form-input">
               </div>
               <div class="form-group full-width">
                 <label for="w-input-phone">Phone Number (Optional)</label>
-                <input type="tel" id="w-input-phone" placeholder="e.g. +1 (555) 349-8210" class="form-input">
+                <input type="tel" id="w-input-phone" placeholder="e.g. +91 98765 43210" class="form-input" inputmode="tel">
               </div>
             </div>
           </div>
@@ -518,7 +559,7 @@
             <div class="form-grid">
               <div class="form-group full-width">
                 <label for="input-name">Full Name</label>
-                <input type="text" id="input-name" placeholder="e.g. Alex Morgan" class="form-input" autocomplete="name">
+                <input type="text" id="input-name" placeholder="e.g. Ramu" class="form-input" autocomplete="name">
               </div>
 
               <!-- Full Editor Headline with Options -->
@@ -548,22 +589,22 @@
                   Date of Birth (DOB)
                   <span id="age-badge" class="badge badge-subtle hidden">Age: --</span>
                 </label>
-                <input type="date" id="input-dob" class="form-input">
+                <input type="text" id="input-dob" placeholder="e.g. 15/04/1997 or 15 April 1997" class="form-input" autocomplete="bday">
               </div>
 
               <div class="form-group">
                 <label for="input-location">Location / City</label>
-                <input type="text" id="input-location" placeholder="e.g. San Francisco, CA" class="form-input">
+                <input type="text" id="input-location" placeholder="e.g. Kanpur" class="form-input">
               </div>
 
               <div class="form-group">
                 <label for="input-email">Email Address</label>
-                <input type="email" id="input-email" placeholder="e.g. alex.morgan@email.com" class="form-input">
+                <input type="email" id="input-email" placeholder="e.g. ramu@email.com" class="form-input">
               </div>
 
               <div class="form-group">
                 <label for="input-phone">Phone Number</label>
-                <input type="tel" id="input-phone" placeholder="e.g. +1 (555) 349-8210" class="form-input">
+                <input type="tel" id="input-phone" placeholder="e.g. +91 98765 43210" class="form-input" inputmode="tel">
               </div>
 
               <!-- Full Editor Bio Options -->
@@ -836,7 +877,7 @@
 
       <!-- Resume Page Container (Strict A4 Paper Dimensions: 210mm x 297mm) -->
       <div class="resume-sheet-wrapper">
-        <div class="a4-sheet-container">
+        <div class="a4-sheet-container" id="a4-sheet-container">
           <div id="resume-canvas" class="resume-sheet template-modern fill-scale-auto" style="--accent-color: #2563eb; font-family: 'Plus Jakarta Sans', sans-serif;">
             <!-- Dynamically Rendered Resume Content in app.js -->
           </div>
@@ -844,6 +885,62 @@
       </div>
     </section>
   </main>
+
+  <!-- Mobile Floating Preview Action Button (FAB) -->
+  <button type="button" class="mobile-preview-fab" id="mobile-preview-fab" title="View Live A4 Resume Preview">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    <span class="fab-text">Live Preview</span>
+  </button>
+
+  <!-- Android & Mobile App Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <button type="button" class="mobile-nav-item active" data-target-view="wizard">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span>Questions</span>
+    </button>
+
+    <button type="button" class="mobile-nav-item" data-target-view="types">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <span>Types</span>
+    </button>
+
+    <button type="button" class="mobile-nav-item" data-target-view="content">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+      <span>All Form</span>
+    </button>
+
+    <button type="button" class="mobile-nav-item" data-target-view="style">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/>
+      </svg>
+      <span>Theme</span>
+    </button>
+
+    <button type="button" class="mobile-nav-item highlight" id="btn-mobile-pdf">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      <span>A4 PDF</span>
+    </button>
+  </nav>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>

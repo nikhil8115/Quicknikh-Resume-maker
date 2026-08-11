@@ -1,5 +1,5 @@
 /**
- * QUICKNIKH RESUME — Core Logic & Glorified Line Template Engine
+ * QUICKNIKH RESUME — Core Logic & Multi-Platform Engine (Android PWA + Desktop Mode)
  */
 
 // Basic & Essential Office / Productivity Skills (Always Available)
@@ -38,33 +38,27 @@ function getSkillPercentage(level) {
 
 // Initial State
 const defaultState = {
-  activeView: "types", // "types", "wizard", "content", "style"
-  wizardStep: 1,       // 1..5
-  resumeType: "tech",  // "tech", "fresher", "executive", "ats", "creative", "academic"
-  density: "auto",     // "auto", "spacious", "balanced", "compact"
+  activeView: "types",   // "types", "wizard", "content", "style"
+  viewMode: "auto",      // "auto", "desktop", "android"
+  wizardStep: 1,         // 1..5
+  resumeType: "tech",    // "tech", "fresher", "executive", "ats", "creative", "academic"
+  density: "auto",       // "auto", "spacious", "balanced", "compact"
   personal: {
-    name: "Alex Morgan",
+    name: "Ramu",
     headline: "Senior Full-Stack Engineer & Architect",
-    dob: "1997-04-15",
-    location: "San Francisco, CA",
-    email: "alex.morgan@email.com",
-    phone: "+1 (555) 438-9210",
+    dob: "15 April 1997",
+    location: "Kanpur",
+    email: "ramu@email.com",
+    phone: "+91 98765 43210",
     summary: BIO_PRESETS.tech
   },
   qualifications: [
     {
       id: "q-1",
       degree: "B.S. in Computer Science & Engineering",
-      institution: "University of California, Berkeley",
+      institution: "Indian Institute of Technology (IIT) Kanpur",
       year: "2015 – 2019",
-      score: "GPA: 3.85 / 4.0 (Magna Cum Laude)"
-    },
-    {
-      id: "q-2",
-      degree: "AWS Certified Solutions Architect",
-      institution: "Amazon Web Services (AWS)",
-      year: "2021",
-      score: "Score: 920/1000"
+      score: "GPA: 3.85 / 4.0 (First Class with Distinction)"
     }
   ],
   skills: [], // EMPTY by default — user clicks basic office or technical chips to select!
@@ -111,7 +105,7 @@ const TYPE_CONFIGS = {
     font: "'Plus Jakarta Sans', sans-serif",
     defaultHeadline: "Senior Full-Stack Engineer",
     defaultBioKey: "tech",
-    suggestedSkills: ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL & Databases", "Docker & K8s", "Git & CI/CD", "System Design", "Cloud AWS/GCP"]
+    suggestedSkills: ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL & Databases", "Docker & K8s", "Git & CI/CD", "System Design", "Cloud & DevOps"]
   },
   fresher: {
     name: "Fresher / Entry-Level",
@@ -174,13 +168,19 @@ const WIZARD_STEP_TITLES = [
 ];
 
 let appState = JSON.parse(JSON.stringify(defaultState));
-const STORAGE_KEY = "quicknikh_resume_state_v1";
+const STORAGE_KEY = "quicknikh_resume_state_v4";
+
+// PWA deferred install prompt
+let deferredInstallPrompt = null;
 
 // ==========================================================================
 // Initialization
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
   loadFromStorage();
+  initServiceWorker();
+  initPwaInstallPrompt();
+  bindViewModeSwitcher();
   bindNavTabs();
   bindResumeTypeCards();
   bindHeadlineOptions();
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindFormInputs();
   bindThemeCustomizers();
   bindHeaderActions();
-  bindMobileTabs();
+  bindMobileNavigation();
 
   // Initial renders
   renderBasicSkillSuggestionChips();
@@ -201,8 +201,97 @@ document.addEventListener("DOMContentLoaded", () => {
   applyActiveType(appState.resumeType || "tech", false);
   setDensity(appState.density || "auto", false);
   setWizardStep(appState.wizardStep || 1);
+  setViewMode(appState.viewMode || "auto", false);
   switchView(appState.activeView || "types");
 });
+
+// ==========================================================================
+// Service Worker & Android PWA Installation
+// ==========================================================================
+function initServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .then((reg) => console.log("QUICKNIKH Service Worker registered successfully!", reg.scope))
+        .catch((err) => console.warn("Service Worker registration failed:", err));
+    });
+  }
+}
+
+function initPwaInstallPrompt() {
+  const banner = document.getElementById("pwa-install-banner");
+  const installBtn = document.getElementById("btn-install-pwa");
+  const dismissBtn = document.getElementById("btn-dismiss-pwa");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    if (banner && !sessionStorage.getItem("pwa_dismissed")) {
+      banner.classList.remove("hidden");
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === "accepted") {
+          showToast("App installed successfully! 🎉", "success");
+        }
+        deferredInstallPrompt = null;
+        if (banner) banner.classList.add("hidden");
+      }
+    });
+  }
+
+  if (dismissBtn) {
+    dismissBtn.addEventListener("click", () => {
+      if (banner) banner.classList.add("hidden");
+      sessionStorage.setItem("pwa_dismissed", "1");
+    });
+  }
+}
+
+// ==========================================================================
+// View Mode Switcher (Auto / Desktop Mode / Android Mode)
+// ==========================================================================
+function bindViewModeSwitcher() {
+  const modePills = document.querySelectorAll(".mode-pill");
+  modePills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const mode = pill.getAttribute("data-mode");
+      setViewMode(mode, true);
+    });
+  });
+}
+
+function setViewMode(mode, triggerToast = true) {
+  appState.viewMode = mode;
+  saveToStorage();
+
+  document.body.classList.remove("mode-auto", "mode-desktop", "mode-android");
+  document.body.classList.add(`mode-${mode}`);
+
+  document.querySelectorAll(".mode-pill").forEach((pill) => {
+    pill.classList.toggle("active", pill.getAttribute("data-mode") === mode);
+  });
+
+  if (triggerToast) {
+    let modeText = "🔄 Responsive Auto Mode";
+    if (mode === "desktop") modeText = "💻 Desktop Split Mode (Wide Layout)";
+    if (mode === "android") modeText = "📱 Android Touch App Mode";
+    showToast(modeText, "info");
+  }
+
+  // Adjust preview on mode change
+  if (mode === "desktop") {
+    const editorPane = document.getElementById("editor-pane");
+    const previewPane = document.getElementById("preview-pane");
+    if (editorPane) editorPane.classList.remove("view-preview");
+    if (previewPane) previewPane.classList.remove("view-editor");
+  }
+}
 
 // ==========================================================================
 // Storage Helpers
@@ -221,6 +310,18 @@ function loadFromStorage() {
     if (saved) {
       const parsed = JSON.parse(saved);
       appState = { ...defaultState, ...parsed };
+      if (!appState.personal.name || appState.personal.name === "Alex Morgan") {
+        appState.personal.name = "Ramu";
+      }
+      if (!appState.personal.location || appState.personal.location === "San Francisco, CA") {
+        appState.personal.location = "Kanpur";
+      }
+      if (appState.personal.email === "alex.morgan@email.com" || appState.personal.email === "alex@example.com") {
+        appState.personal.email = "ramu@email.com";
+      }
+      if (appState.personal.dob === "1997-04-15") {
+        appState.personal.dob = "15 April 1997";
+      }
     }
   } catch (e) {
     console.error("Failed to parse localStorage state", e);
@@ -416,6 +517,10 @@ function switchView(viewName) {
     btn.classList.toggle("active", btn.getAttribute("data-view") === viewName);
   });
 
+  document.querySelectorAll(".mobile-nav-item").forEach((item) => {
+    item.classList.toggle("active", item.getAttribute("data-target-view") === viewName);
+  });
+
   document.querySelectorAll(".view-panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === `view-${viewName}`);
   });
@@ -448,11 +553,6 @@ function applyActiveType(typeKey, triggerToast = true) {
   document.querySelectorAll(".type-card").forEach((card) => {
     card.classList.toggle("selected", card.getAttribute("data-type") === typeKey);
   });
-
-  const badge = document.getElementById("active-type-badge");
-  if (badge) {
-    badge.textContent = cfg.badgeText;
-  }
 
   updateRoleSkillSuggestions(cfg.suggestedSkills);
   syncStyleControls();
@@ -714,28 +814,65 @@ function bindFormInputs() {
 }
 
 // ==========================================================================
-// Age Calculation Helper
+// Age Calculation & Flexible Typed Date Parser Helpers
 // ==========================================================================
+function parseDateFlexible(str) {
+  if (!str || typeof str !== "string") return null;
+  const trimmed = str.trim();
+  if (!trimmed) return null;
+
+  // Pattern 1: DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+  const dmyMatch = trimmed.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+  if (dmyMatch) {
+    const day = parseInt(dmyMatch[1], 10);
+    const month = parseInt(dmyMatch[2], 10) - 1;
+    const year = parseInt(dmyMatch[3], 10);
+    const d = new Date(year, month, day);
+    if (!isNaN(d.getTime()) && d.getDate() === day && d.getMonth() === month) {
+      return d;
+    }
+  }
+
+  // Pattern 2: YYYY-MM-DD or YYYY/MM/DD
+  const ymdMatch = trimmed.match(/^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/);
+  if (ymdMatch) {
+    const year = parseInt(ymdMatch[1], 10);
+    const month = parseInt(ymdMatch[2], 10) - 1;
+    const day = parseInt(ymdMatch[3], 10);
+    const d = new Date(year, month, day);
+    if (!isNaN(d.getTime())) return d;
+  }
+
+  // Pattern 3: Natural language dates (e.g. "15 April 1997", "15th Aug 1998", "Jan 15, 1997")
+  const cleanStr = trimmed.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
+  const parsed = new Date(cleanStr);
+  if (!isNaN(parsed.getTime()) && parsed.getFullYear() >= 1900 && parsed.getFullYear() <= new Date().getFullYear()) {
+    return parsed;
+  }
+
+  return null;
+}
+
 function calculateAge(dobString) {
   if (!dobString) return null;
-  const dob = new Date(dobString);
-  if (isNaN(dob.getTime())) return null;
+  const dob = parseDateFlexible(dobString);
+  if (!dob) return null;
   const today = new Date();
   let age = today.getFullYear() - dob.getFullYear();
   const m = today.getMonth() - dob.getMonth();
   if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
     age--;
   }
-  return age >= 0 ? age : null;
+  return (age >= 0 && age <= 120) ? age : null;
 }
 
 function formatDate(dobString) {
   if (!dobString) return "";
-  const parts = dobString.split("-");
-  if (parts.length !== 3) return dobString;
-  const [year, month, day] = parts;
-  const date = new Date(year, month - 1, day);
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  const dob = parseDateFlexible(dobString);
+  if (dob) {
+    return dob.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  }
+  return dobString.trim();
 }
 
 function updateAgeBadge() {
@@ -1084,27 +1221,66 @@ function syncAllInputsWithState() {
 }
 
 // ==========================================================================
-// Mobile Tabs
+// Mobile & Android Navigation & Floating Preview FAB
 // ==========================================================================
-function bindMobileTabs() {
+function bindMobileNavigation() {
   const tabEditorBtn = document.getElementById("tab-editor-btn");
   const tabPreviewBtn = document.getElementById("tab-preview-btn");
   const editorPane = document.getElementById("editor-pane");
   const previewPane = document.getElementById("preview-pane");
+  const previewFab = document.getElementById("mobile-preview-fab");
+  const mobilePdfBtn = document.getElementById("btn-mobile-pdf");
 
-  tabEditorBtn.addEventListener("click", () => {
-    tabEditorBtn.classList.add("active");
-    tabPreviewBtn.classList.remove("active");
-    editorPane.classList.remove("view-preview");
-    previewPane.classList.remove("view-editor");
+  function showMobileEditor() {
+    if (tabEditorBtn) tabEditorBtn.classList.add("active");
+    if (tabPreviewBtn) tabPreviewBtn.classList.remove("active");
+    if (editorPane) editorPane.classList.remove("view-preview");
+    if (previewPane) previewPane.classList.remove("view-editor");
+  }
+
+  function showMobilePreview() {
+    if (tabPreviewBtn) tabPreviewBtn.classList.add("active");
+    if (tabEditorBtn) tabEditorBtn.classList.remove("active");
+    if (editorPane) editorPane.classList.add("view-preview");
+    if (previewPane) previewPane.classList.add("view-editor");
+    // Scroll to top of preview
+    const sheetWrapper = document.querySelector(".resume-sheet-wrapper");
+    if (sheetWrapper) sheetWrapper.scrollTop = 0;
+  }
+
+  if (tabEditorBtn) tabEditorBtn.addEventListener("click", showMobileEditor);
+  if (tabPreviewBtn) tabPreviewBtn.addEventListener("click", showMobilePreview);
+
+  // Floating Action Button (FAB) toggles preview
+  if (previewFab) {
+    previewFab.addEventListener("click", () => {
+      const isCurrentlyPreviewing = previewPane && previewPane.classList.contains("view-editor");
+      if (isCurrentlyPreviewing) {
+        showMobileEditor();
+        previewFab.querySelector(".fab-text").textContent = "Live Preview";
+      } else {
+        showMobilePreview();
+        previewFab.querySelector(".fab-text").textContent = "Edit Resume";
+      }
+    });
+  }
+
+  // Mobile Bottom Nav Items
+  document.querySelectorAll(".mobile-nav-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      const targetView = item.getAttribute("data-target-view");
+      if (targetView) {
+        showMobileEditor();
+        switchView(targetView);
+      }
+    });
   });
 
-  tabPreviewBtn.addEventListener("click", () => {
-    tabPreviewBtn.classList.add("active");
-    tabEditorBtn.classList.remove("active");
-    editorPane.classList.add("view-preview");
-    previewPane.classList.add("view-editor");
-  });
+  if (mobilePdfBtn) {
+    mobilePdfBtn.addEventListener("click", () => {
+      window.print();
+    });
+  }
 }
 
 // ==========================================================================
